@@ -2,13 +2,13 @@
 
 $love = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'love')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
     }
 
-    $l        = 0;
+    $l = 0;
     $lover[0] = null;
     $lover[1] = null;
 
@@ -26,7 +26,7 @@ $love = function (int $who, array $message, int $type) {
     if (!empty($lover[0]) and !empty($lover[1])) {
         $one = strtolower($lover[0]);
         $two = strtolower($lover[1]);
-        
+
         $love = 16;
 
         for ($j = 0; $j < sizeof($lover); $j++) {
@@ -36,12 +36,12 @@ $love = function (int $who, array $message, int $type) {
         }
 
         $love = $love % 102;
-            
+
         $reg = $bot->users[$who]->getRegname();
         if (!empty($reg)) {
             $who = $reg;
         }
-            
+
         if ($love == 101) {
             $bot->network->sendMessageAutoDetection(
                 $who,

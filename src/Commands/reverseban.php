@@ -2,7 +2,7 @@
 
 $reverseban = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'reverseban')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -44,7 +44,7 @@ $reverseban = function (int $who, array $message, int $type) {
             );
         }
 
-        $hours   = $message[2];
+        $hours = $message[2];
 
         if (isset($message[3])) {
             $reason = implode(' ', array_slice($message, 3));

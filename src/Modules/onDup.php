@@ -2,6 +2,6 @@
 
 $onDup = function () {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
     $bot->stop();
 };

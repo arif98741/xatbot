@@ -1,10 +1,10 @@
 <?php
 
-use xatbot\Models\Language;
+use Xatbot\Bot\Models\Language;
 
 $edit = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'edit')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -25,7 +25,7 @@ $edit = function (int $who, array $message, int $type) {
     }
 
     if (isset($message[1]) && (strtolower($message[1]) == 'kickafk')) {
-        if (!isset($message[2]) || !is_numeric($message[2]) || (int) $message[2] < 5 || (int) $message[2] > 120) {
+        if (!isset($message[2]) || !is_numeric($message[2]) || (int)$message[2] < 5 || (int)$message[2] > 120) {
             return $bot->network->sendMessageAutoDetection(
                 $who,
                 'Usage: !edit kickafk [time] (Min: 5 minutes - Max: 120 minutes)',
@@ -107,7 +107,7 @@ $edit = function (int $who, array $message, int $type) {
             $languagesList = Language::all();
             foreach ($languagesList as $langue) {
                 if ($langue->code == strtolower($message[2]) ||
-                        strtolower($langue->name) == strtolower($message[2])) {
+                    strtolower($langue->name) == strtolower($message[2])) {
                     $bot->data->language_id = $langue->id;
                     $bot->data->save();
                     return $bot->network->sendMessageAutoDetection(
@@ -123,7 +123,7 @@ $edit = function (int $who, array $message, int $type) {
                 $type
             );
             break;
-            
+
         case 'moderation':
             switch (strtolower($message[2])) {
                 case 'on':
@@ -142,7 +142,7 @@ $edit = function (int $who, array $message, int $type) {
                         $type
                     );
                     break;
-              
+
                 case 'off':
                     if ($bot->data->togglemoderation == false) {
                         return $bot->network->sendMessageAutoDetection(
@@ -159,7 +159,7 @@ $edit = function (int $who, array $message, int $type) {
                         $type
                     );
                     break;
-                
+
                 default:
                     $bot->network->sendMessageAutoDetection(
                         $who,
@@ -185,15 +185,15 @@ $edit = function (int $who, array $message, int $type) {
             break;
 
         case 'kickafk':
-            $bot->data->kickafk_minutes = (int) $message[2];
+            $bot->data->kickafk_minutes = (int)$message[2];
             $bot->data->save();
             $bot->network->sendMessageAutoDetection(
                 $who,
-                $bot->botlang('cmd.edit.kickafkok', [(int) $message[2]]),
+                $bot->botlang('cmd.edit.kickafkok', [(int)$message[2]]),
                 $type
             );
             break;
-        
+
         default:
             return $bot->network->sendMessageAutoDetection(
                 $who,

@@ -2,7 +2,7 @@
 
 $onAbort = function (array $array) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
     // for the time being
     $bot->network->reconnect();
 };

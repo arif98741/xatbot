@@ -5,7 +5,7 @@ $jinx = function (int $who, array $message, int $type) {
         Work In Progress
         Contains a few errors
     */
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'jinx')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -18,23 +18,23 @@ $jinx = function (int $who, array $message, int $type) {
             $type
         );
     }
-    
+
     $jinxType = strtolower($message[1]) ?? "mix";
     unset($message[0], $message[1]);
-    
+
     $message = implode(' ', $message);
-    
+
     $string = $message . $who;
     $Rand = 0;
     for ($i = 0; $i < strlen($string); $i++) {
         $Rand += ord($string[$i]) != 32 ? ord($string[$i]) : 0;
     }
-    
+
     $seed = $Rand;
 
     $random = function () use (&$seed) {
         $seed = ($seed ^ ($seed << 21));
-        
+
         $a = $seed;
         $b = 35;
         $z = hexdec(80000000);
@@ -46,14 +46,14 @@ $jinx = function (int $who, array $message, int $type) {
         } else {
             $a = ($a >> $b);
         }
-        
+
         $seed = ($seed ^ ($a));
         $seed = ($seed ^ ($seed << 4));
         return ($seed);
     };
-    
+
     $Arg = 100 * (4 / 50);
-    
+
     $message = explode(' ', $message);
     $_local_9 = [];
 
@@ -85,7 +85,7 @@ $jinx = function (int $who, array $message, int $type) {
         case "ends":
             $message2 = [];
             $messageTmp = "";
-            
+
             for ($i = 0; $i < count($message); $i++) {
                 $message2 = str_split($message[$i]);
                 $messageTmp = $message2[0];
@@ -98,18 +98,18 @@ $jinx = function (int $who, array $message, int $type) {
         case "middle":
             $message2 = $message3 = [];
             $messageTmp = $messageTmp2 = "";
-            
+
             for ($i = 0; $i < count($message); $i++) {
                 $message2 = str_split($message[$i]);
                 if (count($message2) > 3) {
                     $messageTmp = $message2[0];
                     $messageTmp2 = end($message2);
                     $message3 = array_slice($message2, 1, count($message2) - 1);
-                    
+
                     usort($message3, function ($a, $b) use (&$random) {
                         return ($random() & 1) ? -1 : 1;
                     });
-                    
+
                     array_unshift($message3, $messageTmp);
                     $message3[] = $messageTmp2;
                     $message[$i] = implode($message3);
@@ -120,16 +120,16 @@ $jinx = function (int $who, array $message, int $type) {
         case "hang":
             $messageTmp = implode(" ", $message);
             $message2 = preg_replace("/[ >]/", "", $messageTmp);
-            
+
             if (strlen($message2) > 0) {
                 $message2 = str_split($message2);
                 $Arg = $Arg > count($message2) ? count($message2) : $Arg;
-                
+
                 for ($i = 0; $i < $Arg; $i++) {
                     $messageTmp = implode("_", explode($message2[$random() % count($message2)], $messageTmp));
                 }
             }
-            
+
             $message = explode(" ", $messageTmp);
             break;
         case 16:
@@ -143,7 +143,7 @@ $jinx = function (int $who, array $message, int $type) {
                     "/[OŒØǾȌȎṌṎṐṒỌỎỐỒỔỖỘỚỜỞỠỢŌÒÓŎŐÔÕÖoœøǿȍȏṍṏṑṓọỏốồổỗộớờởỡợōòóŏőôõö]/",
                     "/[UŨŪŬŮŰŲÙÚÛÜȔȖṲṴṶṸṺỤỦỨỪỬỮỰuũūŭůűųùúûüȕȗṳṵṷṹṻụủứừửữự]/",
                     "/[YẙỲỴỶỸŶŸÝyẙỳỵỷỹŷÿý]/"
-                 ],
+                ],
                 ["egge", "egga", "eggi", "eggo", "eggu", "eggy"],
                 $message
             );
@@ -209,7 +209,7 @@ $jinx = function (int $who, array $message, int $type) {
             $message = explode(" ", $messageTmp);
             break;
     }
-    
+
     for ($i = 0; $i < count($message); $i++) {
         if ($message[$i] == ">") {
             $message[$i] = array_pop($_local_9);

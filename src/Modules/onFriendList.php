@@ -1,7 +1,7 @@
 <?php
 
-use xatbot\API\DataAPI;
-use xatbot\Bot\XatVariables;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Bot\XatVariables;
 
 $onFriendList = function (array $array) {
 
@@ -12,7 +12,7 @@ $onFriendList = function (array $array) {
     $foo = ['B', 'M'];
     $bar = ['000000000', '000000'];
 
-    $bot  = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
     $list = explode(',', $array['v']);
     $list = array_diff($list, ['10101']);
 
@@ -24,7 +24,7 @@ $onFriendList = function (array $array) {
         );
     }
 
-    $ctx  = stream_context_create(['http' => ['timeout' => 1]]);
+    $ctx = stream_context_create(['http' => ['timeout' => 1]]);
 
     $volunteers = XatVariables::getVolunteers();
     $staffList = $bot->stafflist;

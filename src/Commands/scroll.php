@@ -2,7 +2,7 @@
 
 $scroll = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'scroll')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -21,7 +21,7 @@ $scroll = function (int $who, array $message, int $type) {
             $bot->network->sendMessage('/s');
             $bot->network->sendMessageAutoDetection($who, $bot->botlang('cmd.scroll.nowcleared'), $type);
             break;
-        
+
         default:
             unset($message[0]);
             $bot->network->sendMessage('/s' . implode(' ', $message));

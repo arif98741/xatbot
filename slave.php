@@ -2,8 +2,8 @@
 
 require_once 'vendor/autoload.php';
 
-use xatbot\Server;
-use xatbot\Models;
+use Xatbot\Bot\Server;
+use Xatbot\Bot\Models;
 
 $server = new Server($argv[1]);
 $server->handle();

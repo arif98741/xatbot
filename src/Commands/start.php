@@ -1,11 +1,11 @@
 <?php
 
-use xatbot\Models\Bot;
-use xatbot\IPC;
+use Xatbot\Bot\IPC;
+use Xatbot\Bot\Models\Bot;
 
 $start = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if ($bot->data->chatid != '2594913') {
         return $bot->network->sendMessageAutoDetection(

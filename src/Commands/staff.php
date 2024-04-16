@@ -1,12 +1,12 @@
 <?php
 
-use xatbot\Utilities;
-use xatbot\Models\Staff;
-use xatbot\Models\Minrank;
+use Xatbot\Bot\Models\Minrank;
+use Xatbot\Bot\Models\Staff;
+use Xatbot\Bot\Utilities;
 
 $staff = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'staff')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -19,7 +19,7 @@ $staff = function (int $who, array $message, int $type) {
             $type
         );
     }
-    
+
     switch ($message[1]) {
         case 'add':
             if (isset($message[2]) && !empty($message[2]) && is_int((int)$message[2])) {
@@ -40,11 +40,11 @@ $staff = function (int $who, array $message, int $type) {
                             $type
                         );
                     }
-                      $rank = strtolower($message[3]);
+                    $rank = strtolower($message[3]);
                     if ($rank == "botowner") {
                         $rank = "Bot Owner";
                     }
-                                           
+
                     if (!in_array(ucfirst($rank), Minrank::pluck('name')->toArray())) {
                         return $bot->network->sendMessageAutoDetection(
                             $who,
@@ -52,7 +52,7 @@ $staff = function (int $who, array $message, int $type) {
                             $type
                         );
                     }
-                      
+
                     foreach ($bot->stafflist as $key => $value) {
                         if ($key == $message[2]) {
                             return $bot->network->sendMessageAutoDetection(
@@ -62,17 +62,17 @@ $staff = function (int $who, array $message, int $type) {
                             );
                         }
                     }
-                      
-                      $minrankID = Minrank::where('name', ucfirst($rank))->first();
-                      
-                      $staff = new Staff;
-                      $staff->bot_id = $bot->data->id;
-                      $staff->xatid = (int)$message[2];
-                      $staff->regname = $regname;
-                      $staff->minrank_id = (int)$minrankID->id;
-                      $staff->save();
-                      
-                      $bot->stafflist = $bot->setStafflist();
+
+                    $minrankID = Minrank::where('name', ucfirst($rank))->first();
+
+                    $staff = new Staff;
+                    $staff->bot_id = $bot->data->id;
+                    $staff->xatid = (int)$message[2];
+                    $staff->regname = $regname;
+                    $staff->minrank_id = (int)$minrankID->id;
+                    $staff->save();
+
+                    $bot->stafflist = $bot->setStafflist();
                     return $bot->network->sendMessageAutoDetection(
                         $who,
                         $bot->botlang('cmd.snitch.added', [
@@ -91,8 +91,8 @@ $staff = function (int $who, array $message, int $type) {
                 foreach ($bot->stafflist as $key => $value) {
                     if ($key == $message[2]) {
                         Staff::where([
-                          ['xatid', '=', $message[2]],
-                          ['bot_id', '=', $bot->data->id]
+                            ['xatid', '=', $message[2]],
+                            ['bot_id', '=', $bot->data->id]
                         ])->delete();
                         $bot->stafflist = $bot->setStafflist();
                         return $bot->network->sendMessageAutoDetection(

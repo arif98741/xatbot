@@ -1,11 +1,11 @@
 <?php
 
-namespace xatbot;
+namespace Xatbot\Bot;
 
-use Monolog\Logger as mLogger;
 use Monolog\ErrorHandler;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
+use Monolog\Logger as mLogger;
 
 class Logger
 {

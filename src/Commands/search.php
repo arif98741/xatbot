@@ -2,7 +2,7 @@
 
 $search = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'search')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -14,13 +14,13 @@ $search = function (int $who, array $message, int $type) {
 
     $r_regname = '\[([^\]]+)\]</font>';
     $r_message = '>([^<]+)</a></b>';
-    $r_link    = '>(xat.com/[^<]+)<';
-    $regex     = '!' . $r_regname . '.+' . $r_message . '.+' . $r_link . '!Us';
+    $r_link = '>(xat.com/[^<]+)<';
+    $regex = '!' . $r_regname . '.+' . $r_message . '.+' . $r_link . '!Us';
 
     $a = [];
-    $a['http']['method']  = 'POST';
-    $a['http']['header']  = 'Content-Type: application/x-www-form-urlencoded';
-    $a['http']['content'] = 'search='.$message[1];
+    $a['http']['method'] = 'POST';
+    $a['http']['header'] = 'Content-Type: application/x-www-form-urlencoded';
+    $a['http']['content'] = 'search=' . $message[1];
 
     $fgc = file_get_contents('https://xat.com/web_gear/chat/search.php', false, stream_context_create($a));
     preg_match_all($regex, $fgc, $matches);
@@ -36,7 +36,7 @@ $search = function (int $who, array $message, int $type) {
 
     if (sizeof($array) >= 3) {
         for ($i = 0; $i < 3; $i++) {
-            $newMessage = '['.$array[$i][0] . '] - ' . $array[$i][1]. ' at ' . $array[$i][2];
+            $newMessage = '[' . $array[$i][0] . '] - ' . $array[$i][1] . ' at ' . $array[$i][2];
 
             if (sizeof($bot->packetsinqueue) > 0) {
                 $bot->packetsinqueue[max(array_keys($bot->packetsinqueue)) + 2000] = [
@@ -54,7 +54,7 @@ $search = function (int $who, array $message, int $type) {
         }
     } elseif (sizeof($array) > 0) {
         for ($i = 0; $i < sizeof($array); $i++) {
-            $newMessage = '['.$array[$i][0] . '] - ' . $array[$i][1] . ' at ' . $array[$i][2];
+            $newMessage = '[' . $array[$i][0] . '] - ' . $array[$i][1] . ' at ' . $array[$i][2];
 
             if (sizeof($bot->packetsinqueue) > 0) {
                 $bot->packetsinqueue[max(array_keys($bot->packetsinqueue)) + 2000] = [

@@ -1,11 +1,11 @@
 <?php
 
-use xatbot\API\DataAPI;
-use xatbot\Bot\XatHangman;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Bot\XatHangman;
 
 $hangman = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'hangman')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);

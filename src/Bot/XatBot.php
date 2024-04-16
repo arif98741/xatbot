@@ -1,11 +1,11 @@
 <?php
 
-namespace xatbot\Bot;
+namespace Xatbot\Bot\Bot;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use xatbot\Models\Bot;
-use xatbot\API\DataAPI;
-use xatbot\Logger;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Logger;
+use Xatbot\Bot\Models\Bot;
 
 class XatBot
 {
@@ -34,23 +34,23 @@ class XatBot
 
     public function __construct(Bot $data, $refreshing = false)
     {
-        $this->data           = $data;
-        $this->started        = time();
-        $this->stopped        = false;
-        $this->aliases        = $this->setAliases();
-        $this->minranks       = $this->setMinranks();
-        $this->botlangs       = $this->setBotlangs();
-        $this->badwords       = $this->setBadwords();
-        $this->autobans       = $this->setAutobanList();
-        $this->responses      = $this->setResponses();
-        $this->stafflist      = $this->setStafflist();
-        $this->autotemps      = $this->setAutotempList();
-        $this->linksfilter    = $this->setLinksfilter();
+        $this->data = $data;
+        $this->started = time();
+        $this->stopped = false;
+        $this->aliases = $this->setAliases();
+        $this->minranks = $this->setMinranks();
+        $this->botlangs = $this->setBotlangs();
+        $this->badwords = $this->setBadwords();
+        $this->autobans = $this->setAutobanList();
+        $this->responses = $this->setResponses();
+        $this->stafflist = $this->setStafflist();
+        $this->autotemps = $this->setAutotempList();
+        $this->linksfilter = $this->setLinksfilter();
         $this->customcommands = $this->setCustomCommands();
-        $this->snitchlist     = $this->setSnitchList();
+        $this->snitchlist = $this->setSnitchList();
         $this->packetsinqueue = [];
-        $this->users          = [];
-        $this->refreshing     = $refreshing;
+        $this->users = [];
+        $this->refreshing = $refreshing;
 
         if ($this->data->premium > time() && $this->data->premiumfreeze == 1) {
             $this->isPremium = true;
@@ -64,14 +64,14 @@ class XatBot
     public function setMinranks()
     {
         $results = Capsule::table('commands')
-                    ->leftJoin('bot_command_minrank', function ($leftjoin) {
-                        $leftjoin->on('bot_command_minrank.command_id', '=', 'commands.id')
-                            ->on('bot_command_minrank.bot_id', '=', Capsule::raw($this->data->id));
-                    })
-                    ->leftJoin('minranks', 'bot_command_minrank.minrank_id', '=', 'minranks.id')
-                    ->select('commands.name', 'minranks.level', 'commands.default_level')
-                    ->get()
-                    ->toArray();
+            ->leftJoin('bot_command_minrank', function ($leftjoin) {
+                $leftjoin->on('bot_command_minrank.command_id', '=', 'commands.id')
+                    ->on('bot_command_minrank.bot_id', '=', Capsule::raw($this->data->id));
+            })
+            ->leftJoin('minranks', 'bot_command_minrank.minrank_id', '=', 'minranks.id')
+            ->select('commands.name', 'minranks.level', 'commands.default_level')
+            ->get()
+            ->toArray();
 
         for ($i = 0; $i < sizeof($results); $i++) {
             if (empty($results[$i]->level)) {
@@ -85,12 +85,12 @@ class XatBot
     public function setBotlangs()
     {
         $results = Capsule::table('botlang')
-                    ->rightJoin('botlang_sentences', 'botlang.botlang_sentences_id', '=', 'botlang_sentences.id')
-                    ->where('botlang.bot_id', $this->data->id)
-                    ->orWhereNull('botlang.bot_id')
-                    ->select('botlang_sentences.name', 'botlang.value', 'botlang_sentences.sentences')
-                    ->get()
-                    ->toArray();
+            ->rightJoin('botlang_sentences', 'botlang.botlang_sentences_id', '=', 'botlang_sentences.id')
+            ->where('botlang.bot_id', $this->data->id)
+            ->orWhereNull('botlang.bot_id')
+            ->select('botlang_sentences.name', 'botlang.value', 'botlang_sentences.sentences')
+            ->get()
+            ->toArray();
 
         $currentLanguage = $this->data->language->code;
 
@@ -110,10 +110,10 @@ class XatBot
     public function setAliases()
     {
         $results = Capsule::table('aliases')
-                ->where('bot_id', $this->data->id)
-                ->select('aliases.command', 'aliases.alias')
-                ->get()
-                ->toArray();
+            ->where('bot_id', $this->data->id)
+            ->select('aliases.command', 'aliases.alias')
+            ->get()
+            ->toArray();
 
         return array_column($results, 'command', 'alias');
     }
@@ -121,10 +121,10 @@ class XatBot
     public function setResponses()
     {
         $results = Capsule::table('responses')
-                ->where('bot_id', $this->data->id)
-                ->select('phrase', 'response')
-                ->get()
-                ->toArray();
+            ->where('bot_id', $this->data->id)
+            ->select('phrase', 'response')
+            ->get()
+            ->toArray();
 
         return array_column($results, 'response', 'phrase');
     }
@@ -132,11 +132,11 @@ class XatBot
     public function setStafflist()
     {
         $results = Capsule::table('staffs')
-                ->join('minranks', 'staffs.minrank_id', '=', 'minranks.id')
-                ->where('bot_id', $this->data->id)
-                ->select('staffs.xatid', 'minranks.level')
-                ->get()
-                ->toArray();
+            ->join('minranks', 'staffs.minrank_id', '=', 'minranks.id')
+            ->where('bot_id', $this->data->id)
+            ->select('staffs.xatid', 'minranks.level')
+            ->get()
+            ->toArray();
 
         return array_column($results, 'level', 'xatid');
     }
@@ -144,16 +144,16 @@ class XatBot
     public function setBadwords()
     {
         $results = Capsule::table('badwords')
-                ->where('bot_id', $this->data->id)
-                ->select('badword', 'method', 'hours')
-                ->get()
-                ->toArray();
+            ->where('bot_id', $this->data->id)
+            ->select('badword', 'method', 'hours')
+            ->get()
+            ->toArray();
 
         $badwords = [];
         for ($i = 0; $i < sizeof($results); $i++) {
             $badwords[$i]['badword'] = $results[$i]->badword;
-            $badwords[$i]['method']  = $results[$i]->method;
-            $badwords[$i]['hours']   = $results[$i]->hours;
+            $badwords[$i]['method'] = $results[$i]->method;
+            $badwords[$i]['hours'] = $results[$i]->hours;
         }
 
         return $badwords;
@@ -162,10 +162,10 @@ class XatBot
     public function setLinksfilter()
     {
         $results = Capsule::table('linksfilter')
-                ->where('bot_id', $this->data->id)
-                ->select('link')
-                ->get()
-                ->toArray();
+            ->where('bot_id', $this->data->id)
+            ->select('link')
+            ->get()
+            ->toArray();
 
         return array_column($results, 'link');
     }
@@ -173,15 +173,15 @@ class XatBot
     public function setAutotempList()
     {
         $results = Capsule::table('autotemps')
-                ->where('bot_id', $this->data->id)
-                ->select('xatid', 'regname', 'hours')
-                ->get();
+            ->where('bot_id', $this->data->id)
+            ->select('xatid', 'regname', 'hours')
+            ->get();
 
         $list = [];
         for ($i = 0; $i < sizeof($results); $i++) {
-            $list[$i]['xatid']   = $results[$i]->xatid;
+            $list[$i]['xatid'] = $results[$i]->xatid;
             $list[$i]['regname'] = $results[$i]->regname;
-            $list[$i]['hours']   = $results[$i]->hours;
+            $list[$i]['hours'] = $results[$i]->hours;
         }
 
         return $list;
@@ -190,16 +190,16 @@ class XatBot
     public function setAutobanList()
     {
         $results = Capsule::table('autobans')
-                ->where('bot_id', $this->data->id)
-                ->select('xatid', 'regname', 'hours', 'method')
-                ->get();
+            ->where('bot_id', $this->data->id)
+            ->select('xatid', 'regname', 'hours', 'method')
+            ->get();
 
         $list = [];
         for ($i = 0; $i < sizeof($results); $i++) {
-            $list[$i]['xatid']   = $results[$i]->xatid;
+            $list[$i]['xatid'] = $results[$i]->xatid;
             $list[$i]['regname'] = $results[$i]->regname;
-            $list[$i]['hours']   = $results[$i]->hours;
-            $list[$i]['method']  = $results[$i]->method;
+            $list[$i]['hours'] = $results[$i]->hours;
+            $list[$i]['method'] = $results[$i]->method;
         }
 
         return $list;
@@ -208,31 +208,31 @@ class XatBot
     public function setCustomCommands()
     {
         $results = Capsule::table('customcommands')
-                ->join('minranks', 'customcommands.minrank_id', '=', 'minranks.id')
-                ->where('bot_id', $this->data->id)
-                ->select('customcommands.command', 'customcommands.response', 'minranks.level')
-                ->get();
+            ->join('minranks', 'customcommands.minrank_id', '=', 'minranks.id')
+            ->where('bot_id', $this->data->id)
+            ->select('customcommands.command', 'customcommands.response', 'minranks.level')
+            ->get();
 
         $list = [];
         for ($i = 0; $i < sizeof($results); $i++) {
-            $list[$i]['command']  = $results[$i]->command;
+            $list[$i]['command'] = $results[$i]->command;
             $list[$i]['response'] = $results[$i]->response;
-            $list[$i]['level']    = $results[$i]->level;
+            $list[$i]['level'] = $results[$i]->level;
         }
 
         return $list;
     }
-    
+
     public function setSnitchList()
     {
         $results = Capsule::table('snitchs')
-                ->where('bot_id', $this->data->id)
-                ->select('xatid', 'regname')
-                ->get();
+            ->where('bot_id', $this->data->id)
+            ->select('xatid', 'regname')
+            ->get();
 
         $list = [];
         for ($i = 0; $i < sizeof($results); $i++) {
-            $list[$i]['xatid']   = $results[$i]->xatid;
+            $list[$i]['xatid'] = $results[$i]->xatid;
             $list[$i]['regname'] = $results[$i]->regname;
         }
 
@@ -271,9 +271,9 @@ class XatBot
                 return false;
             }
         }
-        $id    = (int)$id;
+        $id = (int)$id;
         $index = (int)($id / 32) + 4;
-        $bit   = (int)($id % 32);
+        $bit = (int)($id % 32);
 
         return (isset($this->network->logininfo['d' . $index]) &&
             ($this->network->logininfo['d' . $index] & (1 << $bit)));
@@ -345,7 +345,7 @@ class XatBot
         if (!is_numeric($this->minranks[$command])) {
             $this->minranks[$command] = $this->stringToRank($this->minranks[$command]);
         }
-        
+
         if ($this->flagToRank($id) >= $this->minranks[$command]) {
             return true;
         }
@@ -358,8 +358,8 @@ class XatBot
 
         return false;
     }
-    
-    public function botLang($name, $args = []): String
+
+    public function botLang($name, $args = []): string
     {
         if (!isset($this->botlangs[$name])) {
             return 'Invalid sentence';
@@ -416,9 +416,9 @@ class XatBot
     public function sec2hms($sec, $padHours = false)
     {
         $hms = '';
-        $days = intval($sec/86400);
+        $days = intval($sec / 86400);
         $hms .= (($padHours) ? str_pad($hours, 2, '0', STR_PAD_LEFT) . ':' : $days . ' days, ');
-        $sec-= ($days * 86400);
+        $sec -= ($days * 86400);
         $hours = intval(intval($sec) / 3600);
         $hms .= (($padHours) ? str_pad($hours, 2, '0', STR_PAD_LEFT) . ':' : $hours . ' hours, ');
         $minutes = intval(($sec / 60) % 60);
@@ -434,7 +434,7 @@ class XatBot
             return false;
         }
 
-        $url  = $this->chatInfo['radio'] . '7.html';
+        $url = $this->chatInfo['radio'] . '7.html';
         $curl = \curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -458,9 +458,9 @@ class XatBot
             return false;
         }
 
-        $song      = htmlspecialchars_decode($infos[6]);
+        $song = htmlspecialchars_decode($infos[6]);
         $listeners = $infos[0];
-        $max       = $infos[3];
+        $max = $infos[3];
 
         return ['lastCheck' => time() + 120, 'song' => $song, 'listeners' => $listeners, 'max' => $max];
     }
@@ -484,7 +484,7 @@ class XatBot
             $ctx = stream_context_create(['http' => ['timeout' => 1]]);
             $json = json_decode(file_get_contents(
                 'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' .
-                    XatVariables::getAPIKeys()['steam'] . '&steamids=' . $steam['steamid'],
+                XatVariables::getAPIKeys()['steam'] . '&steamids=' . $steam['steamid'],
                 false,
                 $ctx
             ), true);
@@ -521,8 +521,7 @@ class XatBot
                         '',
                         '',
                         '🎮 ' . $gameTitle . $this->users[$uid]->getStatusglow()
-                    )
-                    ;
+                    );
                 }
             } else {
                 if (!empty($type)) {
@@ -624,8 +623,8 @@ class XatBot
             }
 
             $spotify['nextCheck'] = time() + (int)ceil(
-                ($currentTrack['item']['duration_ms'] - $currentTrack['progress_ms']) / 1000
-            );
+                    ($currentTrack['item']['duration_ms'] - $currentTrack['progress_ms']) / 1000
+                );
             DataAPI::set('spotify_' . $uid, $spotify);
 
             $artistsArray = [];
@@ -658,8 +657,7 @@ class XatBot
                     '',
                     $currentTrack['item']['preview_url'],
                     '🎵 ' . $artist . ' - ' . $song . $this->users[$uid]->getStatusglow()
-                )
-                ;
+                );
             }
         }
 

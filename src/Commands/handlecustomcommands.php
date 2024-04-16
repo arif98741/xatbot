@@ -1,11 +1,11 @@
 <?php
 
-use xatbot\Utilities;
-use xatbot\Bot\XatVariables;
+use Xatbot\Bot\Bot\XatVariables;
+use Xatbot\Bot\Utilities;
 
 $handlecustomcommands = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
     $customcommand = substr($message[0], 1);
     $bool = false;
 
@@ -38,7 +38,7 @@ $handlecustomcommands = function (int $who, array $message, int $type) {
                     '{latestpower}' => ucfirst($latestPower['power']['name']),
                     '{latestpowerid}' => $latestPower['id'],
                     '{latestpowerstoreprice}' => $latestPower['power']['storeCost'],
-                    '{latestpowertradeprice}' => ($latestPower['power']['minCost']+$latestPower['power']['maxCost'])/2,
+                    '{latestpowertradeprice}' => ($latestPower['power']['minCost'] + $latestPower['power']['maxCost']) / 2,
                     '{latestpowerstatus}' => ($latestPower['power']['isNew'] ?
                         ($latestPower['power']['isLimited'] ? 'LIMITED' : 'UNLIMITED') :
                         'UNRELEASED'),

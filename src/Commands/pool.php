@@ -2,7 +2,7 @@
 
 $pool = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'pool')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -24,7 +24,7 @@ $pool = function (int $who, array $message, int $type) {
         case 'banpool':
             $pool = 2;
             break;
-        
+
         default:
             return $bot->network->sendMessageAutoDetection($who, 'Usage: !pool [main/staff/banpool]', $type);
             break;

@@ -1,6 +1,6 @@
 <?php
 
-namespace xatbot;
+namespace Xatbot\Bot;
 
 class Extensions
 {
@@ -13,10 +13,7 @@ class Extensions
         $extensionsDirectories = ['Modules', 'Commands'];
 
         foreach ($extensionsDirectories as $extensionsDir) {
-            $callbacks = json_decode(
-                file_get_contents('.' . DIRECTORY_SEPARATOR . strtolower($extensionsDir) . '.json', true),
-                true
-            );
+            $callbacks = json_decode(file_get_contents('.' . DIRECTORY_SEPARATOR . strtolower($extensionsDir) . '.json', true), true, 512, JSON_THROW_ON_ERROR);
 
             $dir = opendir('src' . DIRECTORY_SEPARATOR . $extensionsDir);
 
@@ -48,6 +45,14 @@ class Extensions
         }
     }
 
+    /**
+     * @param $data
+     * @param $type
+     * @param $name
+     * @param $url
+     * @param $callbacks
+     * @return array
+     */
     private static function loadExtension($data, $type, $name, $url, $callbacks)
     {
         require($url);

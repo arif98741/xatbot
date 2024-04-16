@@ -1,11 +1,11 @@
 <?php
 
-use xatbot\API\DataAPI;
-use xatbot\Bot\XatConnect4;
-use xatbot\Bot\XatVariables;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Bot\XatConnect4;
+use Xatbot\Bot\Bot\XatVariables;
 
 $onApp = function (int $who, string $app, array $array) {
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
     switch ($app) {
         case '10000':
             break;
@@ -18,7 +18,7 @@ $onApp = function (int $who, string $app, array $array) {
                     return;
                 }
                 if ((DataAPI::isSetVariable('boards_' . $who) && (strlen($array['t']) == 0 ||
-                    strlen($array['t'] == 1))) || !DataAPI::isSetVariable('boards_' . $who)) {
+                            strlen($array['t'] == 1))) || !DataAPI::isSetVariable('boards_' . $who)) {
                     DataAPI::set('boards_' . $who, new XatConnect4());
                 }
                 $last = substr($array['t'], -1);
@@ -101,10 +101,10 @@ $onApp = function (int $who, string $app, array $array) {
                                 'u' => XatVariables::getXatid(),
                                 'd' => $who,
                                 't' => 'T,' . (DataAPI::isSetVariable('sent_trade_' . $who) ?
-                                    DataAPI::get('sent_trade_' . $who) : '0;0;') . ',' .
-                                        (DataAPI::isSetVariable('received_trade_' . $who) ?
-                                    DataAPI::get('received_trade_' . $who) : '0;0;') . ',' .
-                                        XatVariables::getPassword()
+                                        DataAPI::get('sent_trade_' . $who) : '0;0;') . ',' .
+                                    (DataAPI::isSetVariable('received_trade_' . $who) ?
+                                        DataAPI::get('received_trade_' . $who) : '0;0;') . ',' .
+                                    XatVariables::getPassword()
                             ];
                             $bot->network->write('x', $buildPacket);
 

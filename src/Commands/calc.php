@@ -1,8 +1,8 @@
 <?php
 
-$calc = function (int $who, array $message, int $type) {
+$calc = static function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'calc')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -22,7 +22,7 @@ $calc = function (int $who, array $message, int $type) {
     $stream['http']['header'] = 'Content-Type: application/x-www-form-urlencoded';
     $stream['http']['content'] = json_encode(['expr' => $expr]);
     $stream['http']['timeout'] = 1;
-    
+
     $res = file_get_contents('http://api.mathjs.org/v1/', false, stream_context_create($stream));
     if (!$res) {
         /*
@@ -39,7 +39,7 @@ $calc = function (int $who, array $message, int $type) {
     if ($json->error == null) {
         return $bot->network->sendMessageAutoDetection(
             $who,
-            '_' . $message . ' = ' .$json->result[count($json->result) - 1],
+            '_' . $message . ' = ' . $json->result[count($json->result) - 1],
             $type
         );
     } else {

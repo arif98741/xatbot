@@ -1,8 +1,8 @@
 <?php
 
 $wikipedia = function (int $who, array $message, int $type) {
-    
-    $bot = xatbot\API\ActionAPI::getBot();
+
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'wikipedia')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -14,7 +14,7 @@ $wikipedia = function (int $who, array $message, int $type) {
     if (empty($message)) {
         return $bot->network->sendMessageAutoDetection($who, 'Usage: !wikipedia [search]', $type);
     }
-    $stream = stream_context_create(['http'=> ['timeout' => 1]]);
+    $stream = stream_context_create(['http' => ['timeout' => 1]]);
     $page = file_get_contents(
         'http://en.wikipedia.org/w/api.php?action=opensearch&search=' . urlencode($message) . '&format=json&limit=1',
         false,

@@ -1,6 +1,6 @@
 <?php
 
-namespace xatbot\Bot;
+namespace Xatbot\Bot\Bot;
 
 class XatConnect4
 {
@@ -14,7 +14,7 @@ class XatConnect4
 
     public function __construct()
     {
-        $this->field  = array_fill(0, 7, [0, 0, 0, 0, 0, 0]);
+        $this->field = array_fill(0, 7, [0, 0, 0, 0, 0, 0]);
         $this->height = [5, 5, 5, 5, 5, 5, 5];
     }
 
@@ -34,8 +34,8 @@ class XatConnect4
         } else {
             $this->field[$column][$this->height[$column]] = $this->red;
             $this->height[$column] = $this->height[$column] - 1;
-            if ($this->check($column, $this->height[$column]+1, 4, $this->red, false) == true) {
-                $this->won=true;
+            if ($this->check($column, $this->height[$column] + 1, 4, $this->red, false) == true) {
+                $this->won = true;
                 return 1000;
             }
             if (($this->height[0] == -1) && ($this->height[1] == -1) && ($this->height[2] == -1)
@@ -142,7 +142,7 @@ class XatConnect4
         }
         return $yes;
     }
-    
+
     public function random()
     {
         return (mt_rand() / mt_getrandmax());
@@ -159,7 +159,7 @@ class XatConnect4
             13 + $this->random() * 4,
             13 + $this->random() * 4
         ];
-        
+
         for ($i = 0; $i <= 6; $i++) {
             if ($this->height[$i] < 0) {
                 $chance[$i] = $chance[$i] - 30000;
@@ -306,7 +306,7 @@ class XatConnect4
             return [-1000, $column];
         }
         if (($this->height[0] == -1) && ($this->height[1] == -1) && ($this->height[2] == -1)
-            && ($this->height[3] == -1) && ($this->height[4] == -1)  && ($this->height[5] == -1)
+            && ($this->height[3] == -1) && ($this->height[4] == -1) && ($this->height[5] == -1)
             && ($this->height[6] == -1)
         ) {
             return [51, $column];

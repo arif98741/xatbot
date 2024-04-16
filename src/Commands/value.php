@@ -1,11 +1,11 @@
 <?php
 
-use xatbot\Bot\XatUser;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Xatbot\Bot\Bot\XatUser;
 
 $value = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'value')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -22,15 +22,15 @@ $value = function (int $who, array $message, int $type) {
         }
     }
 
-    $powers = xatbot\Bot\XatVariables::getPowers();
+    $powers = Xatbot\Bot\Bot\XatVariables::getPowers();
 
     if (sizeof($xatusers) > 0) {
-        $regname    = '';
+        $regname = '';
         $storeprice = 0;
-        $minprice   = 0;
-        $maxprice   = 0;
-        $count      = 0;
-        $cdoubles   = 0;
+        $minprice = 0;
+        $maxprice = 0;
+        $count = 0;
+        $cdoubles = 0;
 
         foreach ($xatusers as $xatuser) {
             unset($user);
@@ -105,10 +105,10 @@ $value = function (int $who, array $message, int $type) {
                 for ($i = 0; $i < sizeof($pO); $i++) {
                     $pos = strpos($pO[$i], '=');
                     if ($pos !== false) {
-                        $id     = (int)substr($pO[$i], 0, $pos);
+                        $id = (int)substr($pO[$i], 0, $pos);
                         $amount = (int)substr($pO[$i], $pos + 1);
                     } else {
-                        $id     = (int)$pO[$i];
+                        $id = (int)$pO[$i];
                         $amount = 1;
                     }
 
@@ -157,12 +157,12 @@ $value = function (int $who, array $message, int $type) {
 
         $regname .= '\'s';
 
-        $mindays  = round($minprice / 13.5);
-        $maxdays  = round($maxprice / 13.5);
+        $mindays = round($minprice / 13.5);
+        $maxdays = round($maxprice / 13.5);
         $mineuros = round($minprice / 333, 2);
         $maxeuros = round($maxprice / 333, 2);
-        $minUSD   = round($mineuros * 1.10, 2);
-        $maxUSD   = round($maxeuros * 1.10, 2);
+        $minUSD = round($mineuros * 1.10, 2);
+        $maxUSD = round($maxeuros * 1.10, 2);
 
         if (($count == 0) && (sizeof($xatusers == 1))) {
             return $bot->network->sendMessageAutoDetection(

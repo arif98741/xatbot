@@ -2,7 +2,7 @@
 
 $gameban = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'gameban')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -31,7 +31,7 @@ $gameban = function (int $who, array $message, int $type) {
 
     if (isset($user)) {
         $gameban = $message[1];
-        $hours   = $message[3];
+        $hours = $message[3];
 
         if (isset($message[4])) {
             $reason = implode(' ', array_slice($message, 4));

@@ -2,7 +2,7 @@
 
 $gamebanme = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'gamebanme')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -19,7 +19,7 @@ $gamebanme = function (int $who, array $message, int $type) {
     }
 
     $gameban = $message[1];
-    $hours   = $message[2];
+    $hours = $message[2];
 
     switch (strtolower($gameban)) {
         case 'snake':

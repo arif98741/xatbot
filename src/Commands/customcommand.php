@@ -1,11 +1,11 @@
 <?php
 
-use xatbot\Models\CustomCommand;
-use xatbot\Models\Minrank;
+use Xatbot\Bot\Models\CustomCommand;
+use Xatbot\Bot\Models\Minrank;
 
 $customcommand = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'customcommand')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -19,10 +19,10 @@ $customcommand = function (int $who, array $message, int $type) {
             $type
         );
     }
-    
+
     switch (strtolower($message[1])) {
         case 'add':
-            if (!isset($message[2], $message[3], $message[4])  || empty($message[2]) || empty($message[3])
+            if (!isset($message[2], $message[3], $message[4]) || empty($message[2]) || empty($message[3])
                 || empty($message[4])) {
                 return $bot->network->sendMessageAutoDetection(
                     $who,
@@ -49,12 +49,12 @@ $customcommand = function (int $who, array $message, int $type) {
                     $type
                 );
             }
-            
+
             $rank = strtolower($message[3]);
             if ($rank == "botowner") {
                 $rank = "Bot Owner";
             }
-            
+
             if (!in_array(ucfirst($rank), Minrank::pluck('name')->toArray())) {
                 return $bot->network->sendMessageAutoDetection(
                     $who,
@@ -62,16 +62,16 @@ $customcommand = function (int $who, array $message, int $type) {
                     $type
                 );
             }
-            
+
             $minrankID = Minrank::where('name', ucfirst($rank))->first();
-            
+
             $customCmd = new CustomCommand;
             $customCmd->bot_id = $bot->data->id;
             $customCmd->command = $command;
             $customCmd->response = implode(' ', array_slice($message, 4));
             $customCmd->minrank_id = (int)$minrankID->id;
             $customCmd->save();
-            
+
             $bot->customcommands = $bot->setCustomCommands();
             return $bot->network->sendMessageAutoDetection(
                 $who,
@@ -92,10 +92,10 @@ $customcommand = function (int $who, array $message, int $type) {
             foreach ($bot->customcommands as $cc) {
                 if (strtolower($command) == $cc['command']) {
                     CustomCommand::where([
-                      ['command', '=', $command],
-                      ['bot_id', '=', $bot->data->id]
+                        ['command', '=', $command],
+                        ['bot_id', '=', $bot->data->id]
                     ])->delete();
-                    
+
                     $bot->customcommands = $bot->setCustomCommands();
                     return $bot->network->sendMessageAutoDetection(
                         $who,

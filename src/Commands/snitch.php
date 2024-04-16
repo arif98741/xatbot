@@ -1,16 +1,16 @@
 <?php
 
-use xatbot\Utilities;
-use xatbot\Models\Snitch;
+use Xatbot\Bot\Models\Snitch;
+use Xatbot\Bot\Utilities;
 
 $snitch = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'snitch')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
     }
-    
+
     if (!isset($message[1]) || empty($message[1]) || !in_array($message[1], ['add', 'remove', 'rm'])) {
         return $bot->network->sendMessageAutoDetection(
             $who,
@@ -48,12 +48,12 @@ $snitch = function (int $who, array $message, int $type) {
                     );
                 }
 
-                  $snitch = new Snitch;
-                  $snitch->bot_id  = $bot->data->id;
-                  $snitch->xatid   = (int)$message[2];
-                  $snitch->regname = $regname;
-                  $snitch->save();
-                  $bot->snitchlist = $bot->setSnitchList();
+                $snitch = new Snitch;
+                $snitch->bot_id = $bot->data->id;
+                $snitch->xatid = (int)$message[2];
+                $snitch->regname = $regname;
+                $snitch->save();
+                $bot->snitchlist = $bot->setSnitchList();
                 return $bot->network->sendMessageAutoDetection(
                     $who,
                     $bot->botlang('cmd.snitch.added', [
@@ -70,8 +70,8 @@ $snitch = function (int $who, array $message, int $type) {
                 foreach ($bot->snitchlist as $snitch) {
                     if ($snitch['xatid'] == $message[2]) {
                         Snitch::where([
-                          ['xatid', '=', $message[2]],
-                          ['bot_id', '=', $bot->data->id]
+                            ['xatid', '=', $message[2]],
+                            ['bot_id', '=', $bot->data->id]
                         ])->delete();
                         $bot->snitchlist = $bot->setSnitchList();
                         return $bot->network->sendMessageAutoDetection(

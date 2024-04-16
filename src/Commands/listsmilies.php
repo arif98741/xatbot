@@ -2,7 +2,7 @@
 
 $listsmilies = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'listsmilies')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -12,7 +12,7 @@ $listsmilies = function (int $who, array $message, int $type) {
         return $bot->network->sendMessageAutoDetection($who, 'Usage: !listsmilies [power/latest]', $type, true);
     }
 
-    $powers = xatbot\Bot\XatVariables::getPowers();
+    $powers = Xatbot\Bot\Bot\XatVariables::getPowers();
 
     if (strtolower($message[1]) == 'latest') {
         $message[1] = end($powers)['name'];
@@ -38,13 +38,13 @@ $listsmilies = function (int $who, array $message, int $type) {
                     if (sizeof($bot->packetsinqueue) > 0) {
                         $bot->packetsinqueue[max(array_keys($bot->packetsinqueue)) + 1000] = [
                             'who' => $who,
-                            'message' => '('.implode('#)(', array_slice($topsh, 0, 10)).'#)',
+                            'message' => '(' . implode('#)(', array_slice($topsh, 0, 10)) . '#)',
                             'type' => $type
                         ];
                     } else {
                         $bot->packetsinqueue[round(microtime(true) * 1000) + 1000] = [
                             'who' => $who,
-                            'message' => '('.implode('#)(', array_slice($topsh, 0, 10)).'#)',
+                            'message' => '(' . implode('#)(', array_slice($topsh, 0, 10)) . '#)',
                             'type' => $type
                         ];
                     }
@@ -53,13 +53,13 @@ $listsmilies = function (int $who, array $message, int $type) {
                         if (sizeof($bot->packetsinqueue) > 0) {
                             $bot->packetsinqueue[max(array_keys($bot->packetsinqueue)) + 1000] = [
                                 'who' => $who,
-                                'message' => '('.implode('#)(', array_slice($topsh, $i, 10)).'#)',
+                                'message' => '(' . implode('#)(', array_slice($topsh, $i, 10)) . '#)',
                                 'type' => $type
                             ];
                         } else {
                             $bot->packetsinqueue[round(microtime(true) * 1000) + 1000] = [
                                 'who' => $who,
-                                'message' => '('.implode('#)(', array_slice($topsh, $i, 10)).'#)',
+                                'message' => '(' . implode('#)(', array_slice($topsh, $i, 10)) . '#)',
                                 'type' => $type
                             ];
                         }
@@ -67,7 +67,7 @@ $listsmilies = function (int $who, array $message, int $type) {
                     return;
                 } else {
                     $implode = $bot->botHasPower($id) ?
-                        '('.implode('#)(', array_slice($topsh, 0, 10)).'#)' :
+                        '(' . implode('#)(', array_slice($topsh, 0, 10)) . '#)' :
                         implode(' ', array_slice($topsh, 0, 10));
                     $implode .= implode(' ', array_slice($topsh, 10));
                 }

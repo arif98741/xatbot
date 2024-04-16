@@ -1,11 +1,10 @@
 <?php
 
-use Illuminate\Database\Capsule\Manager as Capsule;
-use xatbot\Bot\XatVariables;
+use Xatbot\Bot\Bot\XatVariables;
 
 $power = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'power')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);

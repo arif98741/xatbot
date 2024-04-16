@@ -1,9 +1,9 @@
 <?php
 
-use xatbot\Utilities;
-use xatbot\Models\Log;
-use xatbot\API\DataAPI;
-use xatbot\Bot\XatVariables;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Bot\XatVariables;
+use Xatbot\Bot\Models\Log;
+use Xatbot\Bot\Utilities;
 
 $onMessage = function (int $who, string $message) {
 
@@ -11,7 +11,7 @@ $onMessage = function (int $who, string $message) {
         return;
     }
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
     $user = @$bot->users[$who];
     $regname = is_object($user) ? $user->getRegname() : $who;
 
@@ -55,7 +55,7 @@ $onMessage = function (int $who, string $message) {
             '{latestpower}' => ucfirst($latestPower['power']['name']),
             '{latestpowerid}' => $latestPower['id'],
             '{latestpowerstoreprice}' => $latestPower['power']['storeCost'],
-            '{latestpowertradeprice}' => ($latestPower['power']['minCost']+$latestPower['power']['maxCost'])/2,
+            '{latestpowertradeprice}' => ($latestPower['power']['minCost'] + $latestPower['power']['maxCost']) / 2,
             '{latestpowerstatus}' => ($latestPower['power']['isNew'] ?
                 ($latestPower['power']['isLimited'] ? 'LIMITED' : 'UNLIMITED') :
                 'UNRELEASED'),
@@ -74,7 +74,7 @@ $onMessage = function (int $who, string $message) {
                     foreach ($replace as $k => $v) {
                         $value = str_replace(strtolower($k), $v, $value);
                     }
-                    
+
                     return $bot->network->sendMessage($value);
                 }
             } else {

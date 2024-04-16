@@ -2,7 +2,7 @@
 
 $weather = function (int $who, array $message, int $type) {
 
-    $bot  = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'weather')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -11,54 +11,54 @@ $weather = function (int $who, array $message, int $type) {
     if (!isset($message[1]) || empty($message[1])) {
         return $bot->network->sendMessageAutoDetection($who, 'Usage: !weather [search]', $type, true);
     }
- 
-    $key = xatbot\Bot\XatVariables::getAPIKeys()['weather'];
- 
+
+    $key = Xatbot\Bot\Bot\XatVariables::getAPIKeys()['weather'];
+
     if (empty($key)) {
         return $bot->network->sendMessageAutoDetection($who, 'Weather API Key needs to be setup', $type);
     }
 
     unset($message[0]);
     $message = implode(' ', $message);
- 
+
     $response = json_decode(
         file_get_contents('http://api.openweathermap.org/data/2.5/weather?APPID=' . $key . '&q=' .
-        urlencode($message)),
+            urlencode($message)),
         true
     );
-   
+
     // api returns 404 if city not found
     if (!($response['cod'] == 200)) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('cmd.weather.notfound'), $type);
     }
 
     $smilies = [
-        'Rain'         => '(rainy)',
-        'Clear'        => '(cleary)',
-        'Clouds'       => '(clouds#ffffff)',
-        'Mist'         => '(foggy)',
+        'Rain' => '(rainy)',
+        'Clear' => '(cleary)',
+        'Clouds' => '(clouds#ffffff)',
+        'Mist' => '(foggy)',
         'Thunderstorm' => '(stormy)'
     ];
- 
+
     // save infos in an array
     $weatherData = [
         'weather' => [
-            'cityname'    => $response['name'],
-            'country'     => $response['sys']['country'],
+            'cityname' => $response['name'],
+            'country' => $response['sys']['country'],
             'description' => ucfirst($response['weather'][0]['description']),
-            'smiley'      => $response['weather'][0]['main']
+            'smiley' => $response['weather'][0]['main']
         ],
         'temp' => [
-            'humidity'   => $response['main']['humidity'] ?? 'Unknown',
-            'kelvin'     => round($response['main']['temp']),
-            'celsius'    => round($response['main']['temp'] - 273.15),
+            'humidity' => $response['main']['humidity'] ?? 'Unknown',
+            'kelvin' => round($response['main']['temp']),
+            'celsius' => round($response['main']['temp'] - 273.15),
             'fahrenheit' => round((($response['main']['temp'] - 273.15) * 1.8) + 32)
         ]
     ];
- 
+
     $weatherInfos = $weatherData['weather']; // weather informations
-    $weatherTemp  = $weatherData['temp']; // weather temp informations
- 
+    $weatherTemp = $weatherData['temp']; // weather temp informations
+
     return $bot->network->sendMessageAutoDetection(
         $who,
         $bot->botlang('cmd.weather.message', [

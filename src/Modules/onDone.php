@@ -2,7 +2,7 @@
 
 $onDone = function (array $array) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
     $bot->network->idleTime = time();
     $bot->done = true;
 

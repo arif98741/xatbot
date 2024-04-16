@@ -1,12 +1,12 @@
 <?php
 
-use xatbot\Models\Bot;
-use xatbot\IPC;
-use xatbot\Utilities;
+use Xatbot\Bot\IPC;
+use Xatbot\Bot\Models\Bot;
+use Xatbot\Bot\Utilities;
 
 $xatbot = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!in_array($who, ['412345607', '1348873407', '21299', '1490020039', '1531162882', '1497708246'])) {
         return $bot->network->sendMessageAutoDetection($who, 'Only xatbot staff can use this command.', $type);
@@ -71,7 +71,7 @@ $xatbot = function (int $who, array $message, int $type) {
             if (empty($message[2])) {
                 return $bot->network->sendMessageAutoDetection($who, 'Usage: !xatbot check [chatname]', $type);
             }
-            
+
             $ctx = stream_context_create(['http' => ['timeout' => 1]]);
             $url = file_get_contents('http://xat.com/' . $message[2] . '?Ocean=' . time(), false, $ctx);
             $botid = Utilities::getBetween($url, '<meta property="xat:bot" content="', '" />');
@@ -82,27 +82,27 @@ $xatbot = function (int $who, array $message, int $type) {
             if (!isset($fgc['id']) || !is_numeric($fgc['id'])) {
                 $bot->network->sendMessageAutoDetection(
                     $who,
-                    'The chat "'.$message[2].'" doesn\'t exist on xat.',
+                    'The chat "' . $message[2] . '" doesn\'t exist on xat.',
                     $type
                 );
                 return;
             }
 
             if (empty($botid)) {
-                $string = 'Bot power is not assigned on the room "'.ucfirst($message[2]).'". To assign, click';
+                $string = 'Bot power is not assigned on the room "' . ucfirst($message[2]) . '". To assign, click';
                 $string .= ' the power bot and click "assign", then configure it with the id 10101 in xat settings.';
                 return $bot->network->sendMessageAutoDetection($who, $string, $type);
             }
 
             if ($botid != 10101) {
-                $string = 'The bot power is not set correctly. (Current xat ID: '.$botid.') If you want your bot to ';
+                $string = 'The bot power is not set correctly. (Current xat ID: ' . $botid . ') If you want your bot to ';
                 $string .= 'work, you must change the bot id to this id 10101.';
                 return $bot->network->sendMessageAutoDetection($who, $string, $type);
             }
 
             $bot->network->sendMessageAutoDetection(
                 $who,
-                'The power bot is configured correctly to the room "'.ucfirst($message[2]).'".',
+                'The power bot is configured correctly to the room "' . ucfirst($message[2]) . '".',
                 $type
             );
             break;
@@ -178,7 +178,7 @@ $xatbot = function (int $who, array $message, int $type) {
                 return $bot->network->sendMessageAutoDetection($who, 'This botid does not exist.', $type);
             }*/
             break;
-        
+
         default:
             $bot->network->sendMessageAutoDetection(
                 $who,

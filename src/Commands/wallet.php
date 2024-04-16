@@ -2,7 +2,7 @@
 
 $wallet = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'wallet')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -24,7 +24,7 @@ $wallet = function (int $who, array $message, int $type) {
     } else {
         $user = $bot->users[$who];
     }
-    
+
     if (isset($user)) {
         $display = ($user->isRegistered() ? $user->getRegname() : $user->getID());
         if ($user->hasPower(27) && !($user->getXats() + $user->getDays() == 0)) {

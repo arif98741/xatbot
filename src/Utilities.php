@@ -1,12 +1,12 @@
 <?php
 
-namespace xatbot;
+namespace Xatbot\Bot;
 
 class Utilities
 {
     public static function isValidXatID($xatid)
     {
-        return ((int) $xatid & 0xFFFFFFFF);
+        return ((int)$xatid & 0xFFFFFFFF);
     }
 
     public static function isXatIDExist($xatid)

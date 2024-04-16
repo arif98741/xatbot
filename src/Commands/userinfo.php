@@ -4,7 +4,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 $userinfo = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'userinfo')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -23,10 +23,10 @@ $userinfo = function (int $who, array $message, int $type) {
         }
 
         $info = Capsule::table('userinfo')
-                ->where('xatid', $message[1])
-                ->orderBy('updated_at', 'desc')
-                ->get()
-                ->toArray();
+            ->where('xatid', $message[1])
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->toArray();
     } elseif (in_array(strtolower($message[1]), ['on', 'off'])) {
         switch (strtolower($message[1])) {
             case 'on':
@@ -37,7 +37,7 @@ $userinfo = function (int $who, array $message, int $type) {
                     $type
                 );
                 break;
-            
+
             case 'off':
                 Capsule::table('userinfo')->where('xatid', $who)->update(['optout' => 1]);
                 return $bot->network->sendMessageAutoDetection(
@@ -49,10 +49,10 @@ $userinfo = function (int $who, array $message, int $type) {
         }
     } else {
         $info = Capsule::table('userinfo')
-                ->whereRaw('LOWER(regname) = ?', [strtolower($message[1])])
-                ->orderBy('updated_at', 'desc')
-                ->get()
-                ->toArray();
+            ->whereRaw('LOWER(regname) = ?', [strtolower($message[1])])
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->toArray();
     }
 
     if (!empty($info)) {

@@ -1,16 +1,16 @@
 <?php
 
-use xatbot\Utilities;
-use xatbot\Models\AutoTemp;
+use Xatbot\Bot\Models\AutoTemp;
+use Xatbot\Bot\Utilities;
 
 $autotemp = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'autotemp')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
     }
-    
+
     if (!isset($message[1]) || empty($message[1]) || !in_array($message[1], ['add', 'remove', 'rm', 'list', 'ls'])) {
         return $bot->network->sendMessageAutoDetection(
             $who,
@@ -51,10 +51,10 @@ $autotemp = function (int $who, array $message, int $type) {
                     }
 
                     $autotemp = new AutoTemp;
-                    $autotemp->bot_id  = $bot->data->id;
-                    $autotemp->xatid   = (int)$message[2];
+                    $autotemp->bot_id = $bot->data->id;
+                    $autotemp->xatid = (int)$message[2];
                     $autotemp->regname = $regname;
-                    $autotemp->hours   = (int)$message[3];
+                    $autotemp->hours = (int)$message[3];
                     $autotemp->save();
                     $bot->autotemps = $bot->setAutotempList();
                     return $bot->network->sendMessageAutoDetection(

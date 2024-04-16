@@ -1,6 +1,6 @@
 <?php
 
-namespace xatbot\Models;
+namespace Xatbot\Bot\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 

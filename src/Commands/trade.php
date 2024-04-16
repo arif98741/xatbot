@@ -1,10 +1,10 @@
 <?php
 
-use xatbot\Bot\XatVariables;
+use Xatbot\Bot\Bot\XatVariables;
 
 $trade = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if ($who != 412345607) {
         return $bot->network->sendMessageAutoDetection($who, 'Nope! :)', $type);
@@ -14,7 +14,7 @@ $trade = function (int $who, array $message, int $type) {
         return $bot->network->sendMessageAutoDetection($who, 'Usage: !trade [powername/powerid] [quantity]', $type);
     }
 
-    $powers      = XatVariables::getPowers();
+    $powers = XatVariables::getPowers();
     $powerstring = '';
 
     switch ($message[1]) {

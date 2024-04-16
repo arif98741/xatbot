@@ -1,8 +1,8 @@
 <?php
 
-${'8ball'} = function (int $who, array $message, int $type) {
+${'8ball'} = static function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, '8ball')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -17,7 +17,7 @@ ${'8ball'} = function (int $who, array $message, int $type) {
         "As I see it, yes", "Most likely", "Outlook good", "I think, Yes", "Signs point to yes", "Reply hazy try again",
         "Ask again later", "Better not tell you now", "Cannot predict now", "Concentrate and ask again",
         "Don't count on it", "My reply is no", "My sources say no", "Outlook not so good",
-        "Very doubtful", "Out come looks good!","Out come looks bad!", "How would I know that?",
+        "Very doubtful", "Out come looks good!", "Out come looks bad!", "How would I know that?",
         "Could you repeat the question?", "Of course!  How could it not be?", "Not a chance!", "Don't count on it!",
         "All sources point to no!", "All sources point to yes!", "Don't bet too much money on it!", "Definitely!",
         "Definitely not!", "Not a chance!", "This is an 8-ball, not a crystal ball...!", "Don't Hold Your Breath!",

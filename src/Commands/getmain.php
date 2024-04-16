@@ -2,7 +2,7 @@
 
 $getmain = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'getmain')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -16,16 +16,16 @@ $getmain = function (int $who, array $message, int $type) {
         return $bot->network->sendPrivateConversation($who, 'Usage: !getmain [chatpassword]');
     }
 
-    $group  = $bot->getChatName($bot->data->chatid);
+    $group = $bot->getChatName($bot->data->chatid);
 
-    $POST['GroupName']  = $group;
-    $POST['password']   = $message[1];
+    $POST['GroupName'] = $group;
+    $POST['password'] = $message[1];
     $POST['SubmitPass'] = 'Submit';
 
     $stream = [
         'http' => [
-            'method'  => 'POST',
-            'header'  => 'Content-Type: application/x-www-form-urlencoded',
+            'method' => 'POST',
+            'header' => 'Content-Type: application/x-www-form-urlencoded',
             'content' => http_build_query($POST)
         ]
     ];

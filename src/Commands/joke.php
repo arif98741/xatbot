@@ -2,13 +2,13 @@
 
 $joke = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'joke')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
     }
 
-    $stream = stream_context_create(['http'=> ['timeout' => 1]]);
+    $stream = stream_context_create(['http' => ['timeout' => 1]]);
     $page = file_get_contents('http://www.jokesclean.com/OneLiner/Random/', false, $stream);
     if (!$page) {
         return $bot->network->sendMessageAutoDetection(

@@ -2,7 +2,7 @@
 
 $chatinfos = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'chatinfos')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -14,8 +14,8 @@ $chatinfos = function (int $who, array $message, int $type) {
         );
     }
 
-    $ctx      = stream_context_create(array('http' => array('timeout' => 1)));
-    $json     = file_get_contents('https://xat.com/web_gear/chat/roomid.php?v2&d='.$message[2], false, $ctx);
+    $ctx = stream_context_create(array('http' => array('timeout' => 1)));
+    $json = file_get_contents('https://xat.com/web_gear/chat/roomid.php?v2&d=' . $message[2], false, $ctx);
     $elements = json_decode($json);
 
     if (!is_object($elements)) {

@@ -1,21 +1,21 @@
 <?php
 
-namespace xatbot\Bot;
+namespace Xatbot\Bot\Bot;
 
-use xatbot\Logger;
-use xatbot\Models\Bot;
-use xatbot\API\DataAPI;
-use xatbot\API\ActionAPI;
+use Xatbot\Bot\API\ActionAPI;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Logger;
+use Xatbot\Bot\Models\Bot;
 
 class XatNetwork
 {
     public $socket;
     public $logininfo;
     public $data;
-    public $xFlag     = 0;
-    public $attempt   = 0;
+    public $xFlag = 0;
+    public $attempt = 0;
     public $prevrpool = -1;
-    public $idleTime  = 0;
+    public $idleTime = 0;
     public $idleLimit = (60 * 20);// 20 minutes / 1200
 
     public function __construct(Bot $data)
@@ -31,8 +31,8 @@ class XatNetwork
                 $this->write(
                     'c',
                     [
-                    'u' => XatVariables::getXatid(),
-                    't' => '/KEEPALIVE'
+                        'u' => XatVariables::getXatid(),
+                        't' => '/KEEPALIVE'
                     ]
                 );
             }
@@ -68,7 +68,7 @@ class XatNetwork
     public function pickIP($chatid)
     {
         $this->xFlag = XatVariables::getIP2()['xFlag'];
-        $ip2         = XatVariables::getIP2();
+        $ip2 = XatVariables::getIP2();
 
         if (!isset($ip2['order'][$this->attempt])) {
             return [0, 0, 0];
@@ -110,10 +110,10 @@ class XatNetwork
 
             $return = [$local7[0], $local8, $local4];
         } else {
-            $local9  = $this->getDom($chatid);
+            $local9 = $this->getDom($chatid);
             $local10 = $this->getPort($chatid);
             $local11 = $local3[1][(4 * $local9) + floor((mt_rand(0, 10) / 10) * 4)];
-            $return  = [$local11, $local10, $local4];
+            $return = [$local11, $local10, $local4];
         }
 
         return $return;
@@ -127,11 +127,11 @@ class XatNetwork
         }
 
         $sockdomain = $infos[0];
-        $useport    = $infos[1];
-        $ctimeout   = 1; // $infos[2];
+        $useport = $infos[1];
+        $ctimeout = 1; // $infos[2];
 
         Logger::getLogger()->info(
-            '[' . $this->data->id. '] IP: ' . $sockdomain . ' PORT: ' . $useport . ' ROOM: ' . $chatid
+            '[' . $this->data->id . '] IP: ' . $sockdomain . ' PORT: ' . $useport . ' ROOM: ' . $chatid
         );
 
         if ($this->socket->connect($sockdomain, $useport, $ctimeout)) {
@@ -210,28 +210,28 @@ class XatNetwork
         $j2['l4'] = rand(10, 500);
         $j2['l3'] = rand(10, 500);
         $j2['l2'] = '0';
-        $j2['q']  = '1';
-        $j2['y']  = $packetY['elements']['i'];
-        $j2['k']  = $this->logininfo['k1'];
+        $j2['q'] = '1';
+        $j2['y'] = $packetY['elements']['i'];
+        $j2['k'] = $this->logininfo['k1'];
         $j2['k3'] = $this->logininfo['k3'];
 
         if (isset($this->logininfo['d1'])) {
             $j2['d1'] = $this->logininfo['d1'];
         }
 
-        $j2['z']  = 12;
-        $j2['p']  = '0';
-        $j2['c']  = $this->data->chatid;
+        $j2['z'] = 12;
+        $j2['p'] = '0';
+        $j2['c'] = $this->data->chatid;
 
         if (!empty($this->data->chatpw)) {
-            $j2['r']  = $this->data->chatpw;
-            $j2['f']  = 6;
-            $j2['e']  = 1;
+            $j2['r'] = $this->data->chatpw;
+            $j2['f'] = 6;
+            $j2['e'] = 1;
         } else {
-            $j2['f']  = '0';
+            $j2['f'] = '0';
         }
 
-        $j2['u']  = $this->logininfo['i'];
+        $j2['u'] = $this->logininfo['i'];
         $maxPowerIndex = XatVariables::getMaxPowerIndex();
 
         if ($this->data->premium < time() || $this->data->premiumfreeze > 1) {
@@ -295,7 +295,7 @@ class XatNetwork
             '{latestpower}' => ucfirst($latestPower['power']['name']),
             '{latestpowerid}' => $latestPower['id'],
             '{latestpowerstoreprice}' => $latestPower['power']['storeCost'],
-            '{latestpowertradeprice}' => ($latestPower['power']['minCost']+$latestPower['power']['maxCost'])/2,
+            '{latestpowertradeprice}' => ($latestPower['power']['minCost'] + $latestPower['power']['maxCost']) / 2,
             '{latestpowerstatus}' => ($latestPower['power']['isNew'] ?
                 ($latestPower['power']['isLimited'] ? 'LIMITED' : 'UNLIMITED') :
                 'UNRELEASED'),
@@ -338,21 +338,21 @@ class XatNetwork
             return XatVariables::getPw();
         }
 
-        $POST['k2']          = '0';
-        $POST['UserId']      = '0';
-        $POST['mode']        = '0';
-        $POST['Pin']         = (!empty(XatVariables::getPin()) ? XatVariables::getPin() : '0');
+        $POST['k2'] = '0';
+        $POST['UserId'] = '0';
+        $POST['mode'] = '0';
+        $POST['Pin'] = (!empty(XatVariables::getPin()) ? XatVariables::getPin() : '0');
         $POST['ChangeEmail'] = '0';
-        $POST['cp']          = '';
-        $POST['NameEmail']   = XatVariables::getRegname();
-        $POST['password']    = XatVariables::getPassword();
-        $POST['Login']       = '';
-        
+        $POST['cp'] = '';
+        $POST['NameEmail'] = XatVariables::getRegname();
+        $POST['password'] = XatVariables::getPassword();
+        $POST['Login'] = '';
+
         $stream = [];
         $stream['http']['method'] = 'POST';
         $stream['http']['header'] = 'Content-Type: application/x-www-form-urlencoded';
         $stream['http']['content'] = http_build_query($POST);
-        
+
         $res = file_get_contents('http://xat.com/web_gear/chat/register.php', false, stream_context_create($stream));
 
         if (strpos($res, 'style="color:#FF0000"><strong>**')) {
@@ -383,8 +383,8 @@ class XatNetwork
         $this->write(
             'm',
             [
-            't' => $message,
-            'u' => $this->logininfo['i']
+                't' => $message,
+                'u' => $this->logininfo['i']
             ]
         );
     }
@@ -394,8 +394,8 @@ class XatNetwork
         $this->write(
             'p',
             [
-            'u' => $uid,
-            't' => $message
+                'u' => $uid,
+                't' => $message
             ]
         );
     }
@@ -405,10 +405,10 @@ class XatNetwork
         $this->write(
             'p',
             [
-            'u' => $uid,
-            't' => $message,
-            's' => 2,
-            'd' => $this->logininfo['i']
+                'u' => $uid,
+                't' => $message,
+                's' => 2,
+                'd' => $this->logininfo['i']
             ]
         );
     }
@@ -434,9 +434,9 @@ class XatNetwork
         $this->write(
             'z',
             [
-            'd' => $uid,
-            'u' => $this->logininfo['i'] . '_0',
-            't' => '/a_NF'
+                'd' => $uid,
+                'u' => $this->logininfo['i'] . '_0',
+                't' => '/a_NF'
             ]
         );
     }
@@ -446,9 +446,9 @@ class XatNetwork
         $this->write(
             'z',
             [
-            'd' => $uid,
-            'u' => $this->logininfo['i'] . '_0',
-            't' => '/l'
+                'd' => $uid,
+                'u' => $this->logininfo['i'] . '_0',
+                't' => '/l'
             ]
         );
     }
@@ -497,9 +497,9 @@ class XatNetwork
         $this->write(
             'c',
             [
-            'p' => $reason.$sound,
-            'u' => $uid,
-            't' => '/k'
+                'p' => $reason . $sound,
+                'u' => $uid,
+                't' => '/k'
             ]
         );
     }
@@ -516,9 +516,9 @@ class XatNetwork
             'c',
             array_merge(
                 [
-                'p' => $reason,
-                'u' => $uid,
-                't' => '/'. $tArgument . $time,
+                    'p' => $reason,
+                    'u' => $uid,
+                    't' => '/' . $tArgument . $time,
                 ],
                 (empty($gamebanid) ? [] : ['w' => $gamebanid])
             )
@@ -530,8 +530,8 @@ class XatNetwork
         $this->write(
             'c',
             [
-            'u' => $uid,
-            't' => '/u'
+                'u' => $uid,
+                't' => '/u'
             ]
         );
     }
@@ -542,8 +542,8 @@ class XatNetwork
         $this->socket->write(
             'c',
             [
-            'u' => $uid,
-            't' => $rankCmd[$rank]
+                'u' => $uid,
+                't' => $rankCmd[$rank]
             ]
         );
     }

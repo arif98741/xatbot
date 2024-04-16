@@ -1,11 +1,11 @@
 <?php
 
-use xatbot\Bot\XatVariables;
-use xatbot\API\DataAPI;
-use xatbot\Models\Log;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Bot\XatVariables;
+use Xatbot\Bot\Models\Log;
 
 $onRankMessage = function (array $array) {
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (isset($array['d'])) {
         $log = new Log;
@@ -31,7 +31,7 @@ $onRankMessage = function (array $array) {
             $user2 = $array['d'];
         }
     }
-    
+
     if ($array['t'][0] == '/') {
         if (substr($array['t'], 0, 3) == '/ka') {
             $log->message = '[Rank] ' . $user1 . ' used kickall. (' . $array['t'] . ')';
@@ -53,14 +53,14 @@ $onRankMessage = function (array $array) {
 
         if (substr($array['t'], 0, 3) == '/gn') {
             $log->message = '[Rank] ' . $user1 . ' banned ' . $user2 . ' for ' .
-                    round(substr($array['t'], 3) / 3600, 2) . ' hours reason: "' . (!empty($array['p']) ?? '') . '"';
+                round(substr($array['t'], 3) / 3600, 2) . ' hours reason: "' . (!empty($array['p']) ?? '') . '"';
             $log->save();
             return;
         }
 
         if (substr($array['t'], 0, 3) == '/gr') {
             $log->message = '[Rank] ' . $user1 . ' redcarded ' . $user2 . ' for ' .
-                    round(substr($array['t'], 3) / 3600, 2) . ' hours reason: "' . (!empty($array['p']) ?? '') . '"';
+                round(substr($array['t'], 3) / 3600, 2) . ' hours reason: "' . (!empty($array['p']) ?? '') . '"';
             $log->save();
             return;
         }

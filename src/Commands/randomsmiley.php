@@ -1,17 +1,17 @@
 <?php
 
 $randomsmiley = function (int $who, array $message, int $type) {
-    
-    $bot = xatbot\API\ActionAPI::getBot();
+
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'randomsmiley')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
     }
-    
+
     if (!$bot->botHasPower(272)) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('missing.power', ['random']), $type);
     }
-    
+
     if (empty($message[1]) || !isset($message[1])) {
         return $bot->network->sendMessageAutoDetection(
             $who,
@@ -25,8 +25,8 @@ $randomsmiley = function (int $who, array $message, int $type) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('cmd.randomsmiley.mustbe'), $type, true);
     }
 
-    $powers = xatbot\Bot\XatVariables::getPowers();
-    $exist  = false;
+    $powers = Xatbot\Bot\Bot\XatVariables::getPowers();
+    $exist = false;
 
     $rand = [];
 

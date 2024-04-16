@@ -1,11 +1,11 @@
 <?php
 
-use xatbot\Bot\XatVariables;
-use xatbot\API\DataAPI;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Bot\XatVariables;
 
 $game = function (int $who, array $message, int $type) {
 
-    $bot  = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'game')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -71,14 +71,14 @@ $game = function (int $who, array $message, int $type) {
 
         case 'times':
         case 'prize':
-            $message =  '!' . strtolower($message[1]) . ' ' . implode(' ', array_slice($message, 2));
+            $message = '!' . strtolower($message[1]) . ' ' . implode(' ', array_slice($message, 2));
             $bot->network->sendMessage($message);
             break;
 
         default:
             return $bot->network->sendMessageAutoDetection(
                 $who,
-                'Usage: !game [' .  implode(', ', array_keys($list)) . ', bot, start, times, prize, stop, bye]',
+                'Usage: !game [' . implode(', ', array_keys($list)) . ', bot, start, times, prize, stop, bye]',
                 $type
             );
             break;

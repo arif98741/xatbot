@@ -1,6 +1,6 @@
 <?php
 
-use xatbot\Models\Log;
+use Xatbot\Bot\Models\Log;
 
 $onTransfer = function (int $from, string $type, string $message, int $to, int $xats, int $days) {
 
@@ -8,7 +8,7 @@ $onTransfer = function (int $from, string $type, string $message, int $to, int $
         return;
     }
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     $regname1 = '';
     $regname2 = '';

@@ -1,6 +1,6 @@
 <?php
 
-namespace xatbot\Bot;
+namespace Xatbot\Bot\Bot;
 
 class XatUser
 {
@@ -30,23 +30,23 @@ class XatUser
 
     public function __construct($packet)
     {
-        $this->id      = $packet['u']  ?? 0;
-        $this->regname = $packet['N']  ?? null;
+        $this->id = $packet['u'] ?? 0;
+        $this->regname = $packet['N'] ?? null;
 
-        $this->nick    = $packet['n']  ?? null;
-        $this->avatar  = $packet['a']  ?? null;
-        $this->home    = $packet['h']  ?? null;
-        $this->bride   = $packet['d2'] ?? 0;
-        $this->app     = $packet['x']  ?? 0;
-        $this->gameban = $packet['w']  ?? 0;
+        $this->nick = $packet['n'] ?? null;
+        $this->avatar = $packet['a'] ?? null;
+        $this->home = $packet['h'] ?? null;
+        $this->bride = $packet['d2'] ?? 0;
+        $this->app = $packet['x'] ?? 0;
+        $this->gameban = $packet['w'] ?? 0;
         $this->wasHere = isset($packet['s']);
 
-        $this->flag0   = $packet['f']  ?? 0;
-        $this->aflags  = $packet['d0'] ?? 0;
-        $this->qflags  = $packet['q']  ?? 0;
+        $this->flag0 = $packet['f'] ?? 0;
+        $this->aflags = $packet['d0'] ?? 0;
+        $this->qflags = $packet['q'] ?? 0;
 
-        $this->login   = $packet['cb'] ?? 0;
-        $this->rev     = $packet['v']  ?? 0;
+        $this->login = $packet['cb'] ?? 0;
+        $this->rev = $packet['v'] ?? 0;
 
         $this->setPowers($packet);
     }
@@ -80,12 +80,12 @@ class XatUser
     {
         return $this->powers;
     }
-    
+
     public function getMaskedPowers()
     {
         return $this->maskedpowers;
     }
-    
+
     public function isStealth()
     {
         return (($this->nick[0] == '$') && ($this->isOwner() || $this->isMain()));
@@ -103,7 +103,7 @@ class XatUser
 
     public function getNick()
     {
-        $pos  = strpos($this->nick, '##');
+        $pos = strpos($this->nick, '##');
         $nick = ($pos === false) ? $this->nick : strstr($this->nick, '##', true);
         $nick = preg_replace(['/\(glow[^)]+\)/', '/\(hat[^)]+\)/'], ['', ''], $nick);
         return ($this->isStealth()) ? substr($nick, 1) : $nick;
@@ -143,7 +143,7 @@ class XatUser
     {
         return (!in_array($this->gameban, [176, 184, 0]));
     }
-    
+
     public function getGameban()
     {
         return $this->gameban;
@@ -219,12 +219,12 @@ class XatUser
         return !$this->onXat();
         //return (($this->flag0 & 1 << 11) != 0); "outdated mobile pawn not used anymore
     }
-    
+
     public function onXat()
     {
         return (($this->qflags & 1) != 0);
     }
-    
+
     public function isBannished()
     {
         return (($this->flag0 & 1 << 12) != 0);
@@ -297,18 +297,18 @@ class XatUser
 
     public function setPowers($packet)
     {
-        for ($i=0; $i < XatVariables::getMaxPowerIndex(); $i++) {
+        for ($i = 0; $i < XatVariables::getMaxPowerIndex(); $i++) {
             $this->powers[$i] = $packet['p' . $i] ?? 0;
         }
     }
-    
+
     public function setMaskedPowers($packet)
     {
-        for ($i=0; $i < XatVariables::getMaxPowerIndex(); $i++) {
+        for ($i = 0; $i < XatVariables::getMaxPowerIndex(); $i++) {
             $this->maskedpowers[$i] = isset($packet['p' . $i]) ? $packet['p' . $i] - $this->powers[$i] : 0;
         }
     }
-    
+
     public function setDoubles($info)
     {
         $this->doubles = $info;
@@ -323,23 +323,24 @@ class XatUser
     {
         $this->days = (int)$days;
     }
-    
+
     public function hasPower($id, $masked = false)
     {
         if (!$this->hasDays()) {
             return false;
         }
-        
-        $id    = (int)$id;
+
+        $id = (int)$id;
         $index = (int)($id / 32);
-        $bit   = (int)($id % 32);
-        
+        $bit = (int)($id % 32);
+
         if ($masked) {
             return (isset($this->maskedpowers[$index]) && ($this->maskedpowers[$index] & (1 << $bit)));
         }
-        
+
         return (isset($this->powers[$index]) && ($this->powers[$index] & (1 << $bit)));
     }
+
     public function getLoginTimestamp()
     {
         return $this->login;

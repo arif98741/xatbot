@@ -1,8 +1,8 @@
 <?php
 
-namespace xatbot\Bot;
+namespace Xatbot\Bot\Bot;
 
-use xatbot\Logger;
+use Xatbot\Bot\Logger;
 
 class XatSocket
 {
@@ -32,7 +32,7 @@ class XatSocket
         socket_set_nonblock($this->socket);
         $time = microtime(true) + $timeout;
         socket_connect($this->socket, $ip, $port);
-        socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, ['sec' => 5,'usec'=> 0]);
+        socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, ['sec' => 5, 'usec' => 0]);
 
         do {
             if (@socket_getpeername($this->socket, $ip, $port) && $ip != '0.0.0.0') {
@@ -46,7 +46,7 @@ class XatSocket
 
     public function disconnect()
     {
-        $this->socket    = null;
+        $this->socket = null;
         $this->connected = false;
     }
 
@@ -131,17 +131,17 @@ class XatSocket
             return;
         }
 
-        $packet       = substr($this->buffer, 0, $pos);
+        $packet = substr($this->buffer, 0, $pos);
         $this->buffer = substr($this->buffer, $pos + 1);
 
         Logger::getLogger()->info('[' . $this->botid . '] <-- ' . $packet);
-        
+
         return $this->parsePacket($packet);
     }
 
     private function parsePacket($string)
     {
-        $node     = null;
+        $node = null;
         $elements = [];
 
         // Removing < />
@@ -154,8 +154,8 @@ class XatSocket
         $string = substr($string, 1, -2);
 
         // Getting the node
-        $pos    = strpos($string, ' ');
-        $node   = ($pos === false) ? $string : substr($string, 0, $pos);
+        $pos = strpos($string, ' ');
+        $node = ($pos === false) ? $string : substr($string, 0, $pos);
 
         $n = preg_match_all('! ([^ =]+(?:="[^"]+")?)!', $string, $matches);
 
@@ -166,7 +166,7 @@ class XatSocket
                 $elements[] = $matches[1][$i];
             } else {
                 $elements[substr($matches[1][$i], 0, $pos)]
-                        = $this->unsanitize(substr($matches[1][$i], $pos + 2, -1));
+                    = $this->unsanitize(substr($matches[1][$i], $pos + 2, -1));
             }
         }
 
@@ -176,7 +176,7 @@ class XatSocket
     private function forgePacket($node = null, $elements = [], $sanitize = true)
     {
         $counter = 0;
-        $packet  = '<' . $node . ' ';
+        $packet = '<' . $node . ' ';
 
         foreach ($elements as $name => $value) {
             if (is_int($name) && ($name == $counter)) {
@@ -210,7 +210,7 @@ class XatSocket
 
     public function unsanitize($str)
     {
-        $str = str_replace(chr(0xCB).chr(0x83), '>', $str);
+        $str = str_replace(chr(0xCB) . chr(0x83), '>', $str);
         $str = str_replace('&lt;', '<', $str);
         $str = str_replace('&apos;', "'", $str);
         $str = str_replace('&quot;', '"', $str);

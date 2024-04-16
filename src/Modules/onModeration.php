@@ -1,10 +1,10 @@
 <?php
 
-use xatbot\API\DataAPI;
+use Xatbot\Bot\API\DataAPI;
 
 $onModeration = function (int $who, string $message) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if ($bot->isPremium && $bot->data->premium < time()) {
         $bot->network->sendMessage('Ah! My premium time is over (cry2)');
@@ -22,7 +22,7 @@ $onModeration = function (int $who, string $message) {
     $regname = is_object($user) ? $user->getRegname() : $who;
 
     DataAPI::set('moderated_' . $who, false);
-    
+
     if (!DataAPI::isSetVariable('lastMessage')) {
         DataAPI::set('lastMessage', $who);
     } else {
@@ -72,7 +72,7 @@ $onModeration = function (int $who, string $message) {
             }
         }
     }
-    
+
     if ($bot->data->togglemoderation) {
         if ($bot->flagToRank($who) < $bot->stringToRank($bot->chatInfo['rank'])) {
             if (isset($bot->data->maxflood) && $bot->data->maxflood > 1) {
@@ -88,13 +88,13 @@ $onModeration = function (int $who, string $message) {
                     }
                 }
             }
-  
+
             foreach ($message2 as $value) {
                 if (isset($bot->data->maxchar) && $bot->data->maxchar > 0) {
                     if (strpos($value, 'ffffff') || strpos($value, '------') || strpos($value, '000000')) {
                     } else {
                         if ($bot->data->maxchar > 1000) {
-                                $bot->data->maxchar = 1000;
+                            $bot->data->maxchar = 1000;
                         }
                         if (preg_match_all('/(.)\1{' . $bot->data->maxchar . ',}/iu', $value)) {
                             DataAPI::set('moderated_' . $who, true);
@@ -106,10 +106,10 @@ $onModeration = function (int $who, string $message) {
                     }
                 }
             }
-  
+
             if ($bot->data->togglelinkfilter === true) {
                 $bool = false;
-                $allowedWebsites = (sizeof($bot->linksfilter) > 0) ? $bot->linksfilter :  ['xatbot.fr'];
+                $allowedWebsites = (sizeof($bot->linksfilter) > 0) ? $bot->linksfilter : ['xatbot.fr'];
                 $pattern = "/([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,4}(\/\S*)?)/";
                 foreach ($message2 as $value) {
                     if (preg_match($pattern, $value)) {
@@ -129,7 +129,7 @@ $onModeration = function (int $who, string $message) {
                     }
                 }
             }
-  
+
             if (isset($bot->data->maxsmilies) && $bot->data->maxsmilies > 1) {
                 $count = 0;
                 $count += preg_match_all('/\([^ ]+\)/', $message, $matches);
@@ -143,17 +143,17 @@ $onModeration = function (int $who, string $message) {
                     );
                 }
             }
-  
+
             if (sizeof($bot->badwords) > 0) {
                 for ($i = 0; $i < sizeof($bot->badwords); $i++) {
                     if (strpos($message, strtolower($bot->badwords[$i]['badword'])) !== false) {
                         DataAPI::set(
                             'modproof',
                             'User: ' . ((!is_null($regname)) ?
-                              $regname . ' (' . $who . ')' : $who) . ' Message: ' . $message
+                                $regname . ' (' . $who . ')' : $who) . ' Message: ' . $message
                         );
                         DataAPI::set('moderated_' . $who, true);
-  
+
                         switch ($bot->badwords[$i]['method']) {
                             case 'ban':
                                 return $bot->network->ban(
@@ -162,7 +162,7 @@ $onModeration = function (int $who, string $message) {
                                     'Do not say inapp words :o !'
                                 );
                                 break;
-  
+
                             case 'kick':
                                 return $bot->network->kick(
                                     $who,
@@ -170,7 +170,7 @@ $onModeration = function (int $who, string $message) {
                                   '
                                 );
                                 break;
-  
+
                             case 'dunce':
                                 return $bot->network->ban(
                                     $who,
@@ -179,7 +179,7 @@ $onModeration = function (int $who, string $message) {
                                     'gd'
                                 );
                                 break;
-  
+
                             case 'zap':
                                 return $bot->network->kick(
                                     $who,
@@ -187,7 +187,7 @@ $onModeration = function (int $who, string $message) {
                                     '#rasberry#bump'
                                 );
                                 break;
-  
+
                             case 'reverse':
                                 return $bot->network->ban(
                                     $who,
@@ -197,7 +197,7 @@ $onModeration = function (int $who, string $message) {
                                     176
                                 );
                                 break;
-  
+
                             case 'yellowcard':
                                 return $bot->network->ban(
                                     $who,
@@ -206,14 +206,14 @@ $onModeration = function (int $who, string $message) {
                                     'gy'
                                 );
                                 break;
-  
+
                             case 'badge':
                                 return $bot->network->sendPrivateConversation(
                                     $who,
                                     '/nb' . 'Do not say inapp words :o !'
                                 );
                                 break;
-  
+
                             case 'naughtystep':
                                 return $bot->network->ban(
                                     $who,
@@ -222,7 +222,7 @@ $onModeration = function (int $who, string $message) {
                                     'gn'
                                 );
                                 break;
-  
+
                             case 'snakeban':
                                 return $bot->network->ban(
                                     $who,
@@ -232,7 +232,7 @@ $onModeration = function (int $who, string $message) {
                                     134
                                 );
                                 break;
-  
+
                             case 'spaceban':
                                 return $bot->network->ban(
                                     $who,
@@ -242,7 +242,7 @@ $onModeration = function (int $who, string $message) {
                                     136
                                 );
                                 break;
-  
+
                             case 'matchban':
                                 return $bot->network->ban(
                                     $who,
@@ -252,7 +252,7 @@ $onModeration = function (int $who, string $message) {
                                     140
                                 );
                                 break;
-  
+
                             case 'codeban':
                                 return $bot->network->ban(
                                     $who,
@@ -262,7 +262,7 @@ $onModeration = function (int $who, string $message) {
                                     162
                                 );
                                 break;
-  
+
                             case 'mazeban':
                                 return $bot->network->ban(
                                     $who,
@@ -272,7 +272,7 @@ $onModeration = function (int $who, string $message) {
                                     152
                                 );
                                 break;
-  
+
                             case 'slotban':
                                 return $bot->network->ban(
                                     $who,
@@ -282,7 +282,7 @@ $onModeration = function (int $who, string $message) {
                                     236
                                 );
                                 break;
-                          
+
                             default:
                                 return $bot->network->ban(
                                     $who,

@@ -1,10 +1,10 @@
 <?php
 
-use xatbot\Bot\XatVariables;
+use Xatbot\Bot\Bot\XatVariables;
 
 $hasmost = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'hasmost')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -14,9 +14,9 @@ $hasmost = function (int $who, array $message, int $type) {
         return $bot->network->sendMessageAutoDetection($who, 'Usage !hasmost [power]', $type);
     }
 
-    $powers    = XatVariables::getPowers();
+    $powers = XatVariables::getPowers();
     $powerName = strtolower($message[1]);
-    $exists    = false;
+    $exists = false;
 
     foreach ($powers as $id => $array) {
         if ($array['name'] == $powerName || $id == $powerName) {

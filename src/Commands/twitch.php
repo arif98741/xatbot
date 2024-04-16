@@ -2,7 +2,7 @@
 
 $twitch = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'twitch')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -13,7 +13,7 @@ $twitch = function (int $who, array $message, int $type) {
     }
 
     $message[1] = preg_replace("/[^a-zA-Z0-9_]/", "", $message[1]);
-    $key = xatbot\Bot\XatVariables::getAPIKeys()['twitch'];
+    $key = Xatbot\Bot\Bot\XatVariables::getAPIKeys()['twitch'];
 
     if (empty($key)) {
         return $bot->network->sendMessageAutoDetection($who, 'Twitch API Key needs to be setup', $type);
@@ -24,7 +24,7 @@ $twitch = function (int $who, array $message, int $type) {
     }
 
     $stream = stream_context_create([
-        'http'=> [
+        'http' => [
             'timeout' => 1,
             'header' => 'Client-ID: ' . $key
         ]
@@ -39,7 +39,7 @@ $twitch = function (int $who, array $message, int $type) {
         }
     */
     $twitch = json_decode($page);
-    
+
     if (isset($twitch->error)) {
         return $bot->network->sendMessageAutoDetection($who, $twitch->message, $type, true);
     } elseif (!$page) {
@@ -61,13 +61,13 @@ $twitch = function (int $who, array $message, int $type) {
 
     $twitchA = [
         'Twitch user [' . $twitch->stream->channel->display_name .
-            '] is currently streaming "' . $twitch->stream->game . '" with ' . $twitch->stream->viewers . ' viewers.',
+        '] is currently streaming "' . $twitch->stream->game . '" with ' . $twitch->stream->viewers . ' viewers.',
         'Title: ' . $twitch->stream->channel->status,
         'Followers: ' . $twitch->stream->channel->followers,
         'Total views: ' . $twitch->stream->channel->views,
         'Partnered: ' . ($twitch->stream->channel->partner == true ? 'Yes' : 'No'),
         $twitch->stream->channel->url
     ];
-    
+
     $bot->network->sendMessageAutoDetection($who, implode(' | ', $twitchA), $type);
 };

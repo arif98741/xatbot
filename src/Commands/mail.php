@@ -1,11 +1,11 @@
 <?php
 
-use xatbot\Models\Mail;
-use xatbot\Models\Userinfo;
+use Xatbot\Bot\Models\Mail;
+use Xatbot\Bot\Models\Userinfo;
 
 $mail = function (int $who, array $message, int $type) {
 
-    $bot  = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'mail')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -89,7 +89,6 @@ $mail = function (int $who, array $message, int $type) {
                 ];
             }
             return;
-            break;
 
         case 'empty':
             $mails = Mail::where(['touser' => $who, 'store' => false])->get();
@@ -100,8 +99,8 @@ $mail = function (int $who, array $message, int $type) {
             break;
 
         case 'check':
-            $mails['old']    = Mail::where(['touser' => $who, 'read' => true, 'store' => false])->get();
-            $mails['new']    = Mail::where(['touser' => $who, 'read' => false, 'store' => false])->get();
+            $mails['old'] = Mail::where(['touser' => $who, 'read' => true, 'store' => false])->get();
+            $mails['new'] = Mail::where(['touser' => $who, 'read' => false, 'store' => false])->get();
             $mails['stored'] = Mail::where(['touser' => $who, 'read' => false, 'store' => true])->get();
 
             if (sizeof($mails['old']) == 0 && sizeof($mails['new']) == 0 && sizeof($mails['stored']) == 0) {
@@ -117,7 +116,6 @@ $mail = function (int $who, array $message, int $type) {
                 ]),
                 $type
             );
-            break;
 
         case 'delete':
             if (!isset($message[2]) || empty($message[2]) || !is_numeric($message[2])) {
@@ -136,7 +134,6 @@ $mail = function (int $who, array $message, int $type) {
                     $type
                 );
             }
-            break;
 
         case 'store':
             if (!isset($message[2]) || empty($message[2]) || !is_numeric($message[2])) {
@@ -156,7 +153,6 @@ $mail = function (int $who, array $message, int $type) {
                     $type
                 );
             }
-            break;
 
         case 'unstore':
             if (!isset($message[2]) || empty($message[2]) || !is_numeric($message[2])) {
@@ -176,7 +172,6 @@ $mail = function (int $who, array $message, int $type) {
                     $type
                 );
             }
-            break;
 
         case 'staff':
             unset($message[0]);
@@ -195,15 +190,14 @@ $mail = function (int $who, array $message, int $type) {
             foreach ($bot->stafflist as $id => $level) {
                 if ($who != $id) {
                     $mail = new Mail;
-                    $mail->touser   = $id;
+                    $mail->touser = $id;
                     $mail->fromuser = $who;
-                    $mail->message  = $message;
+                    $mail->message = $message;
                     $mail->save();
                 }
             }
             return $bot->network->sendMessageAutoDetection($who, $bot->botlang('cmd.mail.sentstaff'), $type);
-            break;
-        
+
         default:
             if (!isset($message[1]) || !isset($message[2]) || empty($message[1]) || empty($message[2])) {
                 return $bot->network->sendMessageAutoDetection(
@@ -259,25 +253,24 @@ $mail = function (int $who, array $message, int $type) {
                     }
 
                     $mail = new Mail;
-                    $mail->touser   = $user->xatid;
+                    $mail->touser = $user->xatid;
                     $mail->fromuser = $who;
-                    $mail->message  = $message;
+                    $mail->message = $message;
                     $mail->save();
                     return $bot->network->sendMessageAutoDetection(
                         $who,
                         $bot->botLang('cmd.mail.messagesent', [$user->regname, $user->xatid]),
                         $type
                     );
-                } else {
-                    return $bot->network->sendMessageAutoDetection(
-                        $who,
-                        $bot->botLang('cmd.mail.cantmailyourself'),
-                        $type
-                    );
                 }
-            } else {
-                return $bot->network->sendMessageAutoDetection($who, $bot->botlang('user.notindatabase'), $type);
+
+                return $bot->network->sendMessageAutoDetection(
+                    $who,
+                    $bot->botLang('cmd.mail.cantmailyourself'),
+                    $type
+                );
             }
-            break;
+
+            return $bot->network->sendMessageAutoDetection($who, $bot->botlang('user.notindatabase'), $type);
     }
 };

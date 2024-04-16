@@ -1,17 +1,16 @@
 <?php
 
-use xatbot\Utilities;
-use xatbot\Bot\XatUser;
-use xatbot\API\DataAPI;
-use xatbot\Models\Mail;
-use xatbot\Models\Autoban;
-use xatbot\Bot\XatVariables;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use xatbot\Logger;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Bot\XatUser;
+use Xatbot\Bot\Bot\XatVariables;
+use Xatbot\Bot\Models\Autoban;
+use Xatbot\Bot\Models\Mail;
+use Xatbot\Bot\Utilities;
 
 $onUserJoined = function (int $who, array $array) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if ($who >= 1900000000) {
         return;
@@ -73,7 +72,7 @@ $onUserJoined = function (int $who, array $array) {
                 '{latestpower}' => ucfirst($latestPower['power']['name']),
                 '{latestpowerid}' => $latestPower['id'],
                 '{latestpowerstoreprice}' => $latestPower['power']['storeCost'],
-                '{latestpowertradeprice}' => ($latestPower['power']['minCost']+$latestPower['power']['maxCost'])/2,
+                '{latestpowertradeprice}' => ($latestPower['power']['minCost'] + $latestPower['power']['maxCost']) / 2,
                 '{latestpowerstatus}' => ($latestPower['power']['isNew'] ?
                     ($latestPower['power']['isLimited'] ? 'LIMITED' : 'UNLIMITED') :
                     'UNRELEASED'),
@@ -139,7 +138,7 @@ $onUserJoined = function (int $who, array $array) {
     if (!DataAPI::isSetVariable('userCooldown_' . $who)) {
         DataAPI::set('userCooldown_' . $who, ['lastCommandSent' => time(), 'commandCount' => 0]);
     }
-        
+
     if ($user->isGamebanned() && $bot->data->gameban_unban == 2) {
         if (!DataAPI::isSetVariable('gamebanrelog_' . $who)) {
             DataAPI::set('gamebanrelog_' . $who, 0);
@@ -152,7 +151,7 @@ $onUserJoined = function (int $who, array $array) {
             $bot->network->unban($who);
             $bot->network->sendMessage(
                 $user->getRegname() ?? $user->getID() . ' signed out and in twice to get unbanned from the gameban ' .
-                $powers[$array['w']]['name'] . '.'
+            $powers[$array['w']]['name'] . '.'
             );
         }
     }
@@ -288,7 +287,7 @@ $onUserJoined = function (int $who, array $array) {
                             236
                         );
                         break;
-                    
+
                     default:
                         return $bot->network->ban(
                             $who,
@@ -332,7 +331,7 @@ $onUserJoined = function (int $who, array $array) {
             case 'all':
                 $member = true;
                 break;
-            
+
             default:
                 $member = false;
                 break;
@@ -342,7 +341,7 @@ $onUserJoined = function (int $who, array $array) {
             $bot->network->changeRank($who, 'member');
         }
     }
-    
+
     if (!empty($bot->autobans)) {
         foreach ($bot->autobans as $autoban) {
             if ($bot->flagToRank($who) < $bot->stringToRank($bot->chatInfo['rank'])) {
@@ -358,23 +357,23 @@ $onUserJoined = function (int $who, array $array) {
                             case 'snakeban':
                                 $gamebanid = 134;
                                 break;
-                    
+
                             case 'spaceban':
                                 $gamebanid = 136;
                                 break;
-                    
+
                             case 'matchban':
                                 $gamebanid = 140;
                                 break;
-                    
+
                             case 'mazeban':
                                 $gamebanid = 152;
                                 break;
-                    
+
                             case 'codeban':
                                 $gamebanid = 162;
                                 break;
-                    
+
                             case 'slotban':
                                 $gamebanid = 236;
                                 break;
@@ -447,6 +446,6 @@ $onUserJoined = function (int $who, array $array) {
         }
     }
 
-    
+
     return;
 };

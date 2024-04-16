@@ -2,15 +2,15 @@
 
 $temp = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'temp')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
     }
 
-    if (empty($message[1]) || empty($message[2])       ||
+    if (empty($message[1]) || empty($message[2]) ||
         empty($message[3]) || !is_numeric($message[3]) ||
-        $message[3] < 0    || $message[3] > 24) {
+        $message[3] < 0 || $message[3] > 24) {
         return $bot->network->sendMessageAutoDetection(
             $who,
             'Usage: !temp [mem/mod/own] [xatid/regname] [time(0-24)]',

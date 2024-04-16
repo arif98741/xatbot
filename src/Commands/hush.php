@@ -2,7 +2,7 @@
 
 $hush = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'hush')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -22,7 +22,7 @@ $hush = function (int $who, array $message, int $type) {
         );
     }
 
-    $rank    = $message[1];
+    $rank = $message[1];
     $seconds = $message[2];
 
     if (isset($message[3])) {

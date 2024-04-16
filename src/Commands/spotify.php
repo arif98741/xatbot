@@ -1,7 +1,7 @@
 <?php
 
-use xatbot\API\ActionAPI;
-use xatbot\API\DataAPI;
+use Xatbot\Bot\API\ActionAPI;
+use Xatbot\Bot\API\DataAPI;
 
 $spotify = function (int $who, array $message, int $type) {
 

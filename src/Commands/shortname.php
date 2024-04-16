@@ -1,7 +1,7 @@
 <?php
 $shortname = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'shortname')) {
         return $bot->network->sendMessageAutoDetection(
@@ -51,13 +51,13 @@ $shortname = function (int $who, array $message, int $type) {
             $type
         );
     }
-    
+
     $stream = [];
     $stream['http']['method'] = 'POST';
     $stream['http']['header'] = 'Content-Type: application/x-www-form-urlencoded';
     $stream['http']['content'] = 'GroupName=' . $message[1] . '&Quote=Get+cost&agree=ON';
     $stream['http']['timeout'] = 2;
-    
+
     $res = file_get_contents('https://xat.com/web_gear/chat/BuyShortName.php', false, stream_context_create($stream));
 
     if (!$res) {
@@ -79,7 +79,7 @@ $shortname = function (int $who, array $message, int $type) {
     }
 
     if (strpos($res, 'Sorry, name already taken') !== false) {
-        if (strpos($res, '(1)')!== false) {
+        if (strpos($res, '(1)') !== false) {
             return $bot->network->sendMessageAutoDetection(
                 $who,
                 $bot->botlang('cmd.shortname.istakenrelease', [$message[1]]),

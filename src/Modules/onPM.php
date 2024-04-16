@@ -1,10 +1,10 @@
 <?php
 
-use xatbot\Models\Log;
+use Xatbot\Bot\Models\Log;
 
 $onPM = function (int $who, string $message) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!isset($bot->users[$who])) {
         return;

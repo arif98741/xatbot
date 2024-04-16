@@ -1,11 +1,11 @@
 <?php
 
-use xatbot\Models\Log;
-use xatbot\API\DataAPI;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Models\Log;
 
 $onCommand = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!isset($bot->users[$who])) {
         return;

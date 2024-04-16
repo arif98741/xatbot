@@ -1,11 +1,11 @@
 <?php
 
-use xatbot\API\DataAPI;
-use xatbot\Models\UserEvents;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Models\UserEvents;
 
 $onUserLeave = function (int $who) {
 
-    $bot  = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if ($who >= 1900000000) {
         return;

@@ -1,12 +1,11 @@
 <?php
 
-use xatbot\IPC;
-use xatbot\Logger;
-use xatbot\Extensions;
-use xatbot\API\DataAPI;
-use xatbot\Models\Server;
-use xatbot\Bot\XatVariables;
-use xatbot\Bot\XatHangman;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Bot\XatHangman;
+use Xatbot\Bot\Bot\XatVariables;
+use Xatbot\Bot\Extensions;
+use Xatbot\Bot\IPC;
+use Xatbot\Bot\Models\Server;
 
 $dev = function (int $who, array $message, int $type) {
 
@@ -14,7 +13,7 @@ $dev = function (int $who, array $message, int $type) {
         return;
     }
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     switch ($message[1]) {
         case 'hangman':
@@ -31,7 +30,7 @@ $dev = function (int $who, array $message, int $type) {
             XatVariables::update();
             $bot->network->sendMessageAutoDetection($who, 'Config updated!', $type);
             break;
- 
+
         case 'memory':
             $usage = memory_get_usage(true);
             $memory = [
@@ -40,7 +39,7 @@ $dev = function (int $who, array $message, int $type) {
                 'Kilobytes: ' . round($usage / 1024),
                 'Megabytes: ' . round($usage / 1024 / 1024)
             ];
-            
+
             $bot->network->sendMessageAutoDetection($who, implode(' | ', $memory), $type);
             break;
 

@@ -1,12 +1,12 @@
 <?php
 
-use xatbot\API\DataAPI;
-use xatbot\Bot\XatVariables;
-use xatbot\Userinfo;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Bot\XatVariables;
+use Xatbot\Bot\Userinfo;
 
 $onTickle = function (int $who, array $array) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!isset($array['t'])) {
         return;
@@ -34,8 +34,8 @@ $onTickle = function (int $who, array $array) {
                 DataAPI::set($key, time());
                 if ($bot->data->gameban_unban == 1) {
                     if (isset($bot->users[$who])
-                    && is_object($bot->users[$who])
-                    && $bot->users[$who]->isGamebanned()) {
+                        && is_object($bot->users[$who])
+                        && $bot->users[$who]->isGamebanned()) {
                         $powers = XatVariables::getPowers();
                         $bot->network->unban($who);
                         $bot->network->sendMessage(
@@ -66,7 +66,7 @@ $onTickle = function (int $who, array $array) {
             if (isset($array['y'])) {
                 $bot->users[$who]->setDays($array['y']);
             }
-            
+
             $bot->users[$who]->setMaskedPowers($array);
 
             $userinfo = new Userinfo(

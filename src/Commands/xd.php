@@ -2,7 +2,7 @@
 
 $xd = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'xd')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -18,9 +18,9 @@ $xd = function (int $who, array $message, int $type) {
     $bot->network->sendMessageAutoDetection(
         $who,
         $bot->botlang('cmd.xd', [
-                $xats,
-                $xats > 1 ? 'xats' : 'xat', $days, $days == 1 ? 'day' : 'days'
-            ]),
+            $xats,
+            $xats > 1 ? 'xats' : 'xat', $days, $days == 1 ? 'day' : 'days'
+        ]),
         $type
     );
 };

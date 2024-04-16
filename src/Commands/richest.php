@@ -2,13 +2,13 @@
 
 $richest = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'richest')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
     }
 
-    $powers = xatbot\Bot\XatVariables::getPowers();
+    $powers = Xatbot\Bot\Bot\XatVariables::getPowers();
 
     foreach ($bot->users as $user) {
         if (!is_object($user)) {
@@ -19,11 +19,11 @@ $richest = function (int $who, array $message, int $type) {
             continue;
         }
 
-        $doubles    = $user->getDoubles();
+        $doubles = $user->getDoubles();
         $storeprice = 0;
-        $minprice   = 0;
-        $maxprice   = 0;
-        $count      = 0;
+        $minprice = 0;
+        $maxprice = 0;
+        $count = 0;
 
         if (isset($doubles)) {
             $pO = explode('|', $doubles);
@@ -31,10 +31,10 @@ $richest = function (int $who, array $message, int $type) {
             for ($i = 0; $i < sizeof($pO); $i++) {
                 $pos = strpos($pO[$i], '=');
                 if ($pos !== false) {
-                    $id      = (int)substr($pO[$i], 0, $pos);
+                    $id = (int)substr($pO[$i], 0, $pos);
                     $ammount = (int)substr($pO[$i], $pos + 1);
                 } else {
-                    $id      = (int)$pO[$i];
+                    $id = (int)$pO[$i];
                     $ammount = 1;
                 }
 
@@ -48,9 +48,9 @@ $richest = function (int $who, array $message, int $type) {
                     }
                 }
 
-                $minprice   += $powers[$id]['minCost'] * $ammount;
-                $maxprice   += $powers[$id]['maxCost'] * $ammount;
-                $count      += $ammount;
+                $minprice += $powers[$id]['minCost'] * $ammount;
+                $maxprice += $powers[$id]['maxCost'] * $ammount;
+                $count += $ammount;
             }
         }
 
@@ -66,8 +66,8 @@ $richest = function (int $who, array $message, int $type) {
                     }
                 }
 
-                $minprice   += $array['minCost'];
-                $maxprice   += $array['maxCost'];
+                $minprice += $array['minCost'];
+                $maxprice += $array['maxCost'];
                 $count++;
             }
         }

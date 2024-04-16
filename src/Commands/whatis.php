@@ -2,18 +2,18 @@
 
 $whatis = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'whatis')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
     }
-    
+
     if (empty($message[1]) || !isset($message[1])) {
         return $bot->network->sendMessageAutoDetection($who, 'Usage: !whatis [smiley]', $type, true);
     }
-    
-    $powers = xatbot\Bot\XatVariables::getPowers();
-    
+
+    $powers = Xatbot\Bot\Bot\XatVariables::getPowers();
+
     foreach ($powers as $power) {
         if ($power['name'] == strtolower($message[1])) {
             return $bot->network->sendMessageAutoDetection(
@@ -35,7 +35,7 @@ $whatis = function (int $who, array $message, int $type) {
             }
         }
     }
-    
+
     if (in_array($message[1], xatbot\Bot\XatVariables::getFreeSmilies())) {
         return $bot->network->sendMessageAutoDetection(
             $who,
@@ -43,6 +43,6 @@ $whatis = function (int $who, array $message, int $type) {
             $type
         );
     }
-    
+
     $bot->network->sendMessageAutoDetection($who, $bot->botlang('cmd.whatis.notfound', [$message[1]]), $type);
 };

@@ -1,8 +1,8 @@
 <?php
 
 $horoscope = function (int $who, array $message, int $type) {
-    
-    $bot = xatbot\API\ActionAPI::getBot();
+
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'horoscope')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -19,10 +19,10 @@ $horoscope = function (int $who, array $message, int $type) {
         $xor ^= $who >> ($i * 8) & 0xFF;
     }
 
-    $love   = round(((($who >> 0x00) & 0xFF) ^ $xor) / 0xFF * 100);
+    $love = round(((($who >> 0x00) & 0xFF) ^ $xor) / 0xFF * 100);
     $health = round(((($who >> 0x08) & 0xFF) ^ $xor) / 0xFF * 100);
-    $luck   = round(((($who >> 0x10) & 0xFF) ^ $xor) / 0xFF * 100);
-    $money  = round(((($who >> 0x18) & 0xFF) ^ $xor) / 0xFF * 100);
+    $luck = round(((($who >> 0x10) & 0xFF) ^ $xor) / 0xFF * 100);
+    $money = round(((($who >> 0x18) & 0xFF) ^ $xor) / 0xFF * 100);
 
     return $bot->network->sendMessageAutoDetection(
         $who,

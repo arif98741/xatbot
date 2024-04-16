@@ -1,16 +1,12 @@
 <?php
 
-namespace xatbot;
-
-use xatbot\Models;
-use xatbot\Logger;
-use xatbot\Bot\XatBot;
-use xatbot\Extensions;
-use xatbot\API\BaseAPI;
-use xatbot\API\DataAPI;
-use xatbot\Bot\XatVariables;
+namespace Xatbot\Bot;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Xatbot\Bot\API\BaseAPI;
+use Xatbot\Bot\API\DataAPI;
+use Xatbot\Bot\Bot\XatBot;
+use Xatbot\Bot\Bot\XatVariables;
 
 class Server
 {
@@ -50,15 +46,15 @@ class Server
 
         $this->capsule->addConnection(
             [
-            'driver'    => $infos['driver'],
-            'host'      => $infos['host'],
-            'database'  => $infos['database'],
-            'username'  => $infos['username'],
-            'password'  => $infos['password'],
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
-            'strict'    => false,
+                'driver' => $infos['driver'],
+                'host' => $infos['host'],
+                'database' => $infos['database'],
+                'username' => $infos['username'],
+                'password' => $infos['password'],
+                'charset' => 'utf8',
+                'collation' => 'utf8_unicode_ci',
+                'prefix' => '',
+                'strict' => false,
             ]
         );
 
@@ -76,9 +72,9 @@ class Server
     private function initAPI()
     {
         Logger::getLogger()->info('Loading API...');
-        $this->params     = BaseAPI::init();
+        $this->params = BaseAPI::init();
         $this->currentBot = &$this->params['botID'];
-        $this->bot        = &$this->params['bot'];
+        $this->bot = &$this->params['bot'];
     }
 
     private function initBots()
@@ -102,7 +98,7 @@ class Server
         if (!$this->socket) {
             exit('Cannot create unix socket');
         }
-        
+
         if (file_exists('sockets' . DIRECTORY_SEPARATOR . strtolower($this->name) . '.sock')) {
             if (@socket_connect($this->socket, 'sockets' . DIRECTORY_SEPARATOR . strtolower($this->name) . '.sock')) {
                 exit($argv[1] . ' server is already started');
@@ -114,12 +110,12 @@ class Server
         if (!$ret) {
             exit();
         }
-        
+
         $ret = socket_set_nonblock($this->socket);
         if (!$ret) {
             exit();
         }
-            
+
         $ret = socket_listen($this->socket);
         if (!$ret) {
             exit();
@@ -150,10 +146,10 @@ class Server
                     }
 
                     Logger::getLogger()->notice('From socket: ' . $packet);
-                    $args    = explode(' ', trim($packet));
+                    $args = explode(' ', trim($packet));
                     $command = $args[0];
-                    $botid   = $args[1] ?? null;
-                    $return  = null;
+                    $botid = $args[1] ?? null;
+                    $return = null;
 
                     switch ($command) {
                         case 'start':
@@ -192,9 +188,9 @@ class Server
 
                         case 'server_status':
                             $return = json_encode([
-                                'bots'        => sizeof($this->xatBots),
-                                'memory'      => round(memory_get_usage(true) / 1024 / 1024),
-                                'cpu'         => trim(exec('ps -p ' . getmypid() . ' -o %cpu')),
+                                'bots' => sizeof($this->xatBots),
+                                'memory' => round(memory_get_usage(true) / 1024 / 1024),
+                                'cpu' => trim(exec('ps -p ' . getmypid() . ' -o %cpu')),
                                 'timestarted' => $this->started
                             ]);
                             break;
@@ -253,7 +249,7 @@ class Server
 
                 foreach ($this->xatBots as $botid => $Ocean) {
                     $this->currentBot = $botid;
-                    $this->bot        = $Ocean;
+                    $this->bot = $Ocean;
                     $Ocean->network->tick();
 
                     usleep(500);
@@ -305,10 +301,10 @@ class Server
                                 break;
                             }
 
-                            $hook   = null;
-                            $args   = [];
+                            $hook = null;
+                            $args = [];
                             $unknow = false;
-                            
+
                             $parseElements = ['u', 'd'];
                             foreach ($parseElements as $parse) {
                                 if (isset($packet['elements'][$parse])) {
@@ -318,15 +314,15 @@ class Server
 
                             switch ($packet['node']) {
                                 case 'abort':
-                                    $hook   = 'onAbort'; // onAbort($array)
+                                    $hook = 'onAbort'; // onAbort($array)
                                     $args[] = $packet['elements'];
                                     break;
-                                    
+
                                 case 'a':
                                     if (isset($packet['elements']['h'])) {
                                         continue 2;
                                     }
-                                    $hook   = 'onTransfer'; // onTransfer($from, $type, $message, $to, $xats, $days)
+                                    $hook = 'onTransfer'; // onTransfer($from, $type, $message, $to, $xats, $days)
                                     $args[] = $packet['elements']['u'];
                                     $args[] = $packet['elements']['k'];
                                     $args[] = $packet['elements']['t'] ?? '';
@@ -336,66 +332,66 @@ class Server
                                     break;
 
                                 case 'bl':
-                                    $hook   = 'onBlast'; // onBlast($array)
+                                    $hook = 'onBlast'; // onBlast($array)
                                     $args[] = $packet['elements'];
                                     break;
 
                                 case 'c':
-                                    $hook   = 'onControlMessage'; // onControlMessage($array)
+                                    $hook = 'onControlMessage'; // onControlMessage($array)
                                     $args[] = $packet['elements'];
                                     break;
 
                                 case 'done':
-                                    $hook   = 'onDone'; // onDone($array)
+                                    $hook = 'onDone'; // onDone($array)
                                     $args[] = $packet['elements'];
                                     break;
 
                                 case 'dup':
-                                    $hook   = 'onDup'; // onDup()
+                                    $hook = 'onDup'; // onDup()
                                     break;
 
                                 case 'f':
-                                    $hook   = 'onFriendList'; // onFriendList($array)
+                                    $hook = 'onFriendList'; // onFriendList($array)
                                     $args[] = $packet['elements'];
                                     break;
 
                                 case 'g':
-                                    $hook   = 'onOpenApp'; // onOpenApp($who, $app)
+                                    $hook = 'onOpenApp'; // onOpenApp($who, $app)
                                     $args[] = $packet['elements']['u'];
                                     $args[] = $packet['elements']['x'];
                                     break;
 
                                 case 'gp':
-                                    $hook   = 'onGroupPowers'; // onGroupPowers($array)
+                                    $hook = 'onGroupPowers'; // onGroupPowers($array)
                                     $args[] = $packet['elements'];
                                     break;
 
                                 case 'i':
-                                    $hook   = 'onChatInfo'; // onChatInfo($array)
+                                    $hook = 'onChatInfo'; // onChatInfo($array)
                                     $args[] = $packet['elements'];
                                     break;
 
                                 case 'idle':
-                                    $hook   = 'onIdle'; // onIdle($array)
+                                    $hook = 'onIdle'; // onIdle($array)
                                     $args[] = $packet['elements'];
                                     break;
 
                                 case 'k':
-                                    $hook   = 'onKick'; // onKick($array)
+                                    $hook = 'onKick'; // onKick($array)
                                     $args[] = $packet['elements'];
                                     break;
 
                                 case 'l':
-                                    $hook   = 'onUserLeave'; // onUserLeave($who)
+                                    $hook = 'onUserLeave'; // onUserLeave($who)
                                     $args[] = $packet['elements']['u'];
                                     break;
-                                    
+
                                 case 'ldone':
                                     // meh
                                     break;
-                                    
+
                                 case 'logout':
-                                    $hook   = 'onLogout'; // onLogout($array)
+                                    $hook = 'onLogout'; // onLogout($array)
                                     $args[] = $packet['elements'];
                                     break;
 
@@ -422,15 +418,15 @@ class Server
 
                                         if (!isset($packet['elements']['s'])) {
                                             if (!isset($packet['elements']['p']) && isset($packet['elements']['i'])) {
-                                                $hook   = 'onMessage'; // onMessage($who, $message)
+                                                $hook = 'onMessage'; // onMessage($who, $message)
                                                 $args[] = $packet['elements']['u'];
                                                 $args[] = $packet['elements']['t'];
                                             } else {
-                                                $hook   = 'onRankMessage'; // onRankMessage($array)
+                                                $hook = 'onRankMessage'; // onRankMessage($array)
                                                 $args[] = $packet['elements'];
                                             }
                                         } elseif ($packet['elements']['s'] & 1) {
-                                            $hook   = 'onOldMessage'; // onOldMessage($who, $message)
+                                            $hook = 'onOldMessage'; // onOldMessage($who, $message)
                                             $args[] = $packet['elements']['d'] ?? $packet['elements']['u'];
                                             $args[] = $packet['elements']['t'];
                                         }
@@ -447,41 +443,41 @@ class Server
                                         continue 2;
                                     }
 
-                                    $hook   = (isset($packet['elements']['s'])) ? 'onPC' : 'onPM'; //onP*($who,$message)
+                                    $hook = (isset($packet['elements']['s'])) ? 'onPC' : 'onPM'; //onP*($who,$message)
                                     $args[] = $packet['elements']['u'];
                                     $args[] = $packet['elements']['t'];
                                     break;
 
                                 case 'q':
-                                    $hook   = 'onRedirect'; // onRedirect($array)
+                                    $hook = 'onRedirect'; // onRedirect($array)
                                     $args[] = $packet['elements'];
                                     break;
 
                                 case 'u':
-                                    $hook   = 'onUserJoined'; // onUserJoined($array)
+                                    $hook = 'onUserJoined'; // onUserJoined($array)
                                     $args[] = $packet['elements']['u'];
                                     $args[] = $packet['elements'];
                                     break;
-                                    
+
                                 case 'v':
-                                    $hook   = 'onLoginInfo'; // onLoginInfo($array)
+                                    $hook = 'onLoginInfo'; // onLoginInfo($array)
                                     $args[] = $packet['elements'];
                                     break;
 
                                 case 'w':
-                                    $hook   = 'onPools'; // onPools($array)
+                                    $hook = 'onPools'; // onPools($array)
                                     $args[] = $packet['elements'];
                                     break;
-                                    
+
                                 case 'x':
-                                    $hook   = 'onApp'; // onApp($who, $app, $elements)
+                                    $hook = 'onApp'; // onApp($who, $app, $elements)
                                     $args[] = $packet['elements']['u'];
                                     $args[] = $packet['elements']['i'] ?? '';
                                     $args[] = $packet['elements'];
                                     break;
 
                                 case 'z':
-                                    $hook   = 'onTickle'; // onTickle($who, $array)
+                                    $hook = 'onTickle'; // onTickle($who, $array)
                                     $args[] = $packet['elements']['u'];
                                     $args[] = $packet['elements'];
                                     break;
@@ -508,7 +504,7 @@ class Server
                                     $args[1] = explode(' ', trim(implode(' ', $args[1])));
                                     $command = substr($args[1][0], 1);
                                 }
-                                
+
                                 if ($hook == 'onMessage') {
                                     $args[2] = 1;
                                 } elseif ($hook == 'onPM') {
@@ -532,7 +528,7 @@ class Server
                                     $this->dispatch('Modules', $hook, $args);
                                 } elseif ($unknow) {
                                     Logger::getLogger()->critical(
-                                        '[' . $botid . '] Unknow node ['.$packet['node'].'] on chat FIXME'
+                                        '[' . $botid . '] Unknow node [' . $packet['node'] . '] on chat FIXME'
                                     );
                                 }
                             }

@@ -2,7 +2,7 @@
 
 $price = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'price')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -12,7 +12,7 @@ $price = function (int $who, array $message, int $type) {
         return $bot->network->sendMessageAutoDetection($who, 'Usage: !price [power]', $type, true);
     }
 
-    $powers = xatbot\Bot\XatVariables::getPowers();
+    $powers = Xatbot\Bot\Bot\XatVariables::getPowers();
 
     if (isset($message[2])) {
         $minCost = $maxCost = 0;
@@ -54,7 +54,7 @@ $price = function (int $who, array $message, int $type) {
             $powers[$powerID]['maxCost'] += $array['maxCost'];
         }
     }
-    
+
     if ($powers[$powerID]['minCost'] == 0 || $powers[$powerID]['maxCost'] == 0) {
         return $bot->network->sendMessageAutoDetection(
             $who,

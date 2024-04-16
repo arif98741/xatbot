@@ -2,7 +2,7 @@
 
 $store = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'store')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -13,8 +13,8 @@ $store = function (int $who, array $message, int $type) {
     }
 
     $message = str_replace(['(', ')'], '', $message);
-    $powers = xatbot\Bot\XatVariables::getPowers();
-    $exist  = false;
+    $powers = Xatbot\Bot\Bot\XatVariables::getPowers();
+    $exist = false;
     $storePrice = 0;
 
     if (in_array($message[1], ['allpower', 'allpowers'])) {
@@ -55,7 +55,7 @@ $store = function (int $who, array $message, int $type) {
                     foreach ($powers as $id => $array) {
                         if ($array['name'] == strtolower($mess) || $id == $mess) {
                             $storePrice += $array['storeCost'];
-                            $exist       = true;
+                            $exist = true;
                         }
                     }
                 }
@@ -88,7 +88,7 @@ $store = function (int $who, array $message, int $type) {
             $dym = $match[1] === false ? $bot->botlang('cmd.didyoumean', [$powers[$powerID]['name']]) : '';
             return $bot->network->sendMessageAutoDetection(
                 $who,
-                $dym . '"'.ucfirst($powers[$powerID]['name']).'" ' . $powers[$powerID]['storeCost'],
+                $dym . '"' . ucfirst($powers[$powerID]['name']) . '" ' . $powers[$powerID]['storeCost'],
                 $type
             );
         }

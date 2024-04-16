@@ -1,6 +1,6 @@
 <?php
 
-namespace xatbot\API;
+namespace Xatbot\Bot\API;
 
 class DataAPI extends BaseAPI
 {
@@ -15,6 +15,9 @@ class DataAPI extends BaseAPI
     //::// Overloading methods
     //::////////////////////////////////////////////////////////////////////////
 
+    /**
+     * @throws \Exception
+     */
     public static function set($name, $value)
     {
         self::$data[self::getBotID()][$name] = $value;
@@ -25,11 +28,17 @@ class DataAPI extends BaseAPI
         return self::$data[self::getBotID()][$name];
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function isSetVariable($name)
     {
         return (isset(self::$data[self::getBotID()][$name]));
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function unSetVariable($name)
     {
         unset(self::$data[self::getBotID()][$name]);

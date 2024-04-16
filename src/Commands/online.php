@@ -1,10 +1,10 @@
 <?php
 
-use xatbot\API\DataAPI;
+use Xatbot\Bot\API\DataAPI;
 
 $online = function (int $who, array $message, int $type) {
-    
-    $bot = xatbot\API\ActionAPI::getBot();
+
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'online')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -37,10 +37,12 @@ $online = function (int $who, array $message, int $type) {
         $bot->network->sendFriendList('10101 ' . $res);
         DataAPI::set('online_command', ['who' => $who, 'type' => $type]);
         return;
-    } elseif (!isset($res)) {
+    }
+
+    if (!isset($res)) {
         $message[1] = strtolower($message[1]);
         if ($message[1] == 'volunteers') {
-            $volunteers = xatbot\Bot\XatVariables::getVolunteers();
+            $volunteers = Xatbot\Bot\Bot\XatVariables::getVolunteers();
 
             $ids = [];
             for ($i = 0; $i < sizeof($volunteers); $i++) {
@@ -51,7 +53,9 @@ $online = function (int $who, array $message, int $type) {
             $bot->network->sendFriendList('10101 ' . $string);
             DataAPI::set('online_command', ['who' => $who, 'type' => $type]);
             return;
-        } elseif ($message[1] == 'chatstaff') {
+        }
+
+        if ($message[1] == 'chatstaff') {
             $ids = [];
             if (sizeof($bot->stafflist) == 0) {
                 return $bot->network->sendMessageAutoDetection(
@@ -67,10 +71,10 @@ $online = function (int $who, array $message, int $type) {
             $bot->network->sendFriendList('10101 ' . $string);
             DataAPI::set('online_command', ['who' => $who, 'type' => $type]);
             return;
-        } else {
-            $bot->network->sendFriendList('10101 ' . $message[1]);
-            DataAPI::set('online_command', ['who' => $who, 'type' => $type]);
-            return;
         }
+
+        $bot->network->sendFriendList('10101 ' . $message[1]);
+        DataAPI::set('online_command', ['who' => $who, 'type' => $type]);
+        return;
     }
 };

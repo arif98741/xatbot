@@ -1,11 +1,11 @@
 <?php
 
-use xatbot\Bot\XatVariables;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Xatbot\Bot\Bot\XatVariables;
 
 $everymissing = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'everymissing')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -22,18 +22,18 @@ $everymissing = function (int $who, array $message, int $type) {
         if ($message[1] == 9223372036854775807) {
             return $bot->network->sendMessageAutoDetection($who, 'I am in a 64-bit environment.', $type, true);
         }
-        
+
         $info = Capsule::table('userinfo')
-                ->where('xatid', $message[1])
-                ->orderBy('updated_at', 'desc')
-                ->get()
-                ->toArray();
+            ->where('xatid', $message[1])
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->toArray();
     } else {
         $info = Capsule::table('userinfo')
-                ->whereRaw('LOWER(regname) = ?', [strtolower($message[1])])
-                ->orderBy('updated_at', 'desc')
-                ->get()
-                ->toArray();
+            ->whereRaw('LOWER(regname) = ?', [strtolower($message[1])])
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->toArray();
     }
 
     if (!empty($info)) {

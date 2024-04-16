@@ -2,13 +2,13 @@
 
 $rankme = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
     if (empty($message[1]) || !isset($message[1])) {
         return $bot->network->sendMessageAutoDetection($who, 'Usage: !rankme [guest/member/mod/owner]', $type, true);
     }
 
     $user = $bot->users[$who];
-    
+
     switch (strtolower($message[1])) {
         case 'guest':
             if ($bot->flagToRank($who) < 1) {
@@ -24,7 +24,7 @@ $rankme = function (int $who, array $message, int $type) {
                 $bot->network->changeRank($user->getID(), 'guest');
             }
             break;
-            
+
         case 'member':
             if ($bot->flagToRank($who) < 2) {
                 if (isset($bot->stafflist[$who])) {
@@ -39,7 +39,7 @@ $rankme = function (int $who, array $message, int $type) {
                 $bot->network->changeRank($user->getID(), 'member');
             }
             break;
-            
+
         case 'mod':
         case 'moderator':
             if ($bot->flagToRank($who) < 3) {
@@ -55,7 +55,7 @@ $rankme = function (int $who, array $message, int $type) {
                 $bot->network->changeRank($user->getID(), 'moderator');
             }
             break;
-            
+
         case 'owner':
             if ($bot->flagToRank($who) < 4) {
                 if (isset($bot->stafflist[$who])) {

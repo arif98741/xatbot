@@ -1,8 +1,8 @@
 <?php
 
-namespace xatbot\Bot;
+namespace Xatbot\Bot\Bot;
 
-use xatbot\Utilities;
+use Xatbot\Bot\Utilities;
 
 class XatHangman
 {
@@ -131,8 +131,8 @@ class XatHangman
     {
         $text = '';
         for ($i = 0; $i < \count($this->alphabet); $i++) {
-            $text .= $this->alphabet[$i] . ',button,' . $this->alphabet[$i] . ',' . (50*($i%7)+40) . ',' .
-                ((($i-$i%7)/7)*50+400) . ',40,40;';
+            $text .= $this->alphabet[$i] . ',button,' . $this->alphabet[$i] . ',' . (50 * ($i % 7) + 40) . ',' .
+                ((($i - $i % 7) / 7) * 50 + 400) . ',40,40;';
         }
 
         $this->bot->network->write('x', $this->defaultPacket + ['t' => $text]);

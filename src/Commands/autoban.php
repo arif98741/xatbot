@@ -1,11 +1,11 @@
 <?php
 
-use xatbot\Utilities;
-use xatbot\Models\AutoBan;
+use Xatbot\Bot\Models\AutoBan;
+use Xatbot\Bot\Utilities;
 
 $autoban = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'autoban')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -18,19 +18,19 @@ $autoban = function (int $who, array $message, int $type) {
             $type
         );
     }
-    
-    $methods  = [
-        'ban'         => 'Ban',
-        'snakeban'    => 'Snakeban',
-        'spaceban'    => 'Spaceban',
-        'matchban'    => 'Matchban',
-        'codeban'     => 'Codeban',
-        'mazeban'     => 'Mazeban',
-        'slotban'     => 'Slotban',
-        'reverseban'  => 'Reverseban',
-        'zipban'      => 'Zipban'
+
+    $methods = [
+        'ban' => 'Ban',
+        'snakeban' => 'Snakeban',
+        'spaceban' => 'Spaceban',
+        'matchban' => 'Matchban',
+        'codeban' => 'Codeban',
+        'mazeban' => 'Mazeban',
+        'slotban' => 'Slotban',
+        'reverseban' => 'Reverseban',
+        'zipban' => 'Zipban'
     ];
-    
+
     switch ($message[1]) {
         case 'add':
             if (isset($message[2]) && !empty($message[2]) && is_int((int)$message[2])) {
@@ -45,7 +45,7 @@ $autoban = function (int $who, array $message, int $type) {
                                 );
                             }
                         }
-                        
+
                         if (Utilities::isValidXatID($message[2])) {
                             $regname = Utilities::isXatIDExist($message[2]);
                             if (!$regname) {
@@ -62,7 +62,7 @@ $autoban = function (int $who, array $message, int $type) {
                                 $type
                             );
                         }
-                        
+
                         if (!array_key_exists(strtolower($message[3]), $methods)) {
                             return $bot->network->sendMessageAutoDetection(
                                 $who,
@@ -70,7 +70,7 @@ $autoban = function (int $who, array $message, int $type) {
                                 $type
                             );
                         }
-                        
+
                         if ($message[4] < 0 || !is_numeric($message[4])) {
                             return $bot->network->sendMessageAutoDetection(
                                 $who,
@@ -78,15 +78,15 @@ $autoban = function (int $who, array $message, int $type) {
                                 $type
                             );
                         }
-                        
+
                         $autoban = new AutoBan;
                         $autoban->bot_id = $bot->data->id;
                         $autoban->xatid = (int)$message[2];
                         $autoban->regname = $regname;
                         $autoban->method = strtolower($message[3]);
-                        $autoban->hours = (int) $message[4];
+                        $autoban->hours = (int)$message[4];
                         $autoban->save();
-                        
+
                         $bot->autobans = $bot->setAutobanList();
                         return $bot->network->sendMessageAutoDetection(
                             $who,
@@ -103,8 +103,8 @@ $autoban = function (int $who, array $message, int $type) {
                 foreach ($bot->autobans as $autoban) {
                     if ($autoban['xatid'] == $message[2]) {
                         AutoBan::where([
-                          ['xatid', '=', (int)$message[2]],
-                          ['bot_id', '=', $bot->data->id]
+                            ['xatid', '=', (int)$message[2]],
+                            ['bot_id', '=', $bot->data->id]
                         ])->delete();
                         $bot->autobans = $bot->setAutobanList();
                         return $bot->network->sendMessageAutoDetection(
@@ -127,7 +127,7 @@ $autoban = function (int $who, array $message, int $type) {
             foreach ($bot->autobans as $autoban) {
                 $autobanList[] = $autoban['regname'] . ' [' . $autoban['xatid'] . ']';
             }
-            
+
             return $bot->network->sendMessageAutoDetection(
                 $who,
                 'Autoban list: ' . (sizeof($autobanList) == 0 ? "None" : implode(', ', $autobanList)) . '.',

@@ -1,7 +1,7 @@
 <?php
 $pc = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'pc')) {
         return $bot->network->sendMessageAutoDetection(

@@ -2,7 +2,7 @@
 
 $active = function (int $who, array $message, int $type) {
 
-    $bot  = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'active')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -24,7 +24,7 @@ $active = function (int $who, array $message, int $type) {
     if (!isset($user)) {
         $bot->network->sendMessageAutoDetection($who, $bot->botlang('user.not.here'), $type);
     } else {
-        $now  = time();
+        $now = time();
         $userTime = $now - xatbot\API\DataAPI::get('active_' . $user->getID());
         $displayName = $user->isRegistered() ? $user->getRegname() . '(' . $user->getID() . ')' : $user->getID();
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 $super = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
     if (!$bot->minrank($who, 'super')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
     }
@@ -28,23 +28,23 @@ $super = function (int $who, array $message, int $type) {
         if ($message[2] == 9223372036854775807) {
             return $bot->network->sendMessageAutoDetection($who, 'I am in a 64-bit environment.', $type, true);
         }
-        
+
         $info = Capsule::table('userinfo')
-                ->where('xatid', $message[2])
-                ->orderBy('updated_at', 'desc')
-                ->get()
-                ->toArray();
+            ->where('xatid', $message[2])
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->toArray();
     } else {
         $info = Capsule::table('userinfo')
-                ->whereRaw('LOWER(regname) = ?', [strtolower($message[2])])
-                ->orderBy('updated_at', 'desc')
-                ->get()
-                ->toArray();
+            ->whereRaw('LOWER(regname) = ?', [strtolower($message[2])])
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->toArray();
     }
 
     if (!empty($info)) {
         $info = $info[0];
-        
+
         $anime = [
             'anime' => 53,
             'manga' => 151,
@@ -137,7 +137,7 @@ $super = function (int $who, array $message, int $type) {
                 return $bot->network->sendMessageAutoDetection(
                     $who,
                     $info->regname . ' is missing ' . implode(', ', $powersmissing) . ' to have (super' .
-                        $message[1] . ').',
+                    $message[1] . ').',
                     $type
                 );
             }

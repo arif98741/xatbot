@@ -1,10 +1,10 @@
 <?php
 
-use xatbot\Bot\XatVariables;
+use Xatbot\Bot\Bot\XatVariables;
 
 $onLoginInfo = function (array $array) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (isset($array['RL']) && $array['RL'] == '1') {
         XatVariables::setLoginPacket($array);

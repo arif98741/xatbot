@@ -1,10 +1,10 @@
 <?php
 
-use xatbot\Bot\XatVariables;
+use Xatbot\Bot\Bot\XatVariables;
 
 $misc = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'misc')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -45,7 +45,7 @@ $misc = function (int $who, array $message, int $type) {
                 return $bot->network->sendMessageAutoDetection($who, 'Usage: !misc chatid [chat name]', $type, true);
             }
 
-            $json = json_decode(file_get_contents('https://xat.com/web_gear/chat/roomid.php?d=' . $message[2].'&v2'));
+            $json = json_decode(file_get_contents('https://xat.com/web_gear/chat/roomid.php?d=' . $message[2] . '&v2'));
 
             if (!$json) {
                 return $bot->network->sendMessageAutoDetection($who, $bot->botlang('chat.notfound'), $type);
@@ -66,7 +66,7 @@ $misc = function (int $who, array $message, int $type) {
                 return $bot->network->sendMessageAutoDetection($who, 'Usage: !misc chatname [chat id]', $type, true);
             }
 
-            $json = json_decode(file_get_contents('https://xat.com/web_gear/chat/roomid.php?i=' . $message[2].'&v2'));
+            $json = json_decode(file_get_contents('https://xat.com/web_gear/chat/roomid.php?i=' . $message[2] . '&v2'));
 
             if (!$json) {
                 return $bot->network->sendMessageAutoDetection($who, $bot->botlang('chat.notfound'), $type);
@@ -186,8 +186,8 @@ $misc = function (int $who, array $message, int $type) {
                 }
 
                 $promoMessage .= $group->n . ' [' . (isset($group->t) ?
-                    sprintf("%02d hours, %02d minutes and %02d seconds", $hours, $minutes, $seconds) . ' left' :
-                    "Auto promoted") . '], ';
+                        sprintf("%02d hours, %02d minutes and %02d seconds", $hours, $minutes, $seconds) . ' left' :
+                        "Auto promoted") . '], ';
                 $count++;
             }
 
@@ -225,7 +225,7 @@ $misc = function (int $who, array $message, int $type) {
             $stream['http']['header'] = 'Content-Type: application/x-www-form-urlencoded';
             $stream['http']['content'] = http_build_query($POST);
             $stream['http']['timeout'] = 1;
-            
+
             $res = file_get_contents(
                 'https://xat.com/web_gear/chat/promotion.php',
                 false,

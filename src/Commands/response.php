@@ -1,11 +1,10 @@
 <?php
 
-use xatbot\Utilities;
-use xatbot\Models\Response;
+use Xatbot\Bot\Models\Response;
 
 $response = function (int $who, array $message, int $type) {
 
-    $bot = xatbot\API\ActionAPI::getBot();
+    $bot = Xatbot\Bot\API\ActionAPI::getBot();
 
     if (!$bot->minrank($who, 'response')) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
@@ -65,7 +64,7 @@ $response = function (int $who, array $message, int $type) {
                 $bot->botlang('cmd.response.added'),
                 $type
             );
-        break;
+            break;
         case 'rm':
         case 'remove':
             $message = implode(' ', $message);
@@ -100,6 +99,6 @@ $response = function (int $who, array $message, int $type) {
                 $bot->botlang('cmd.response.notfound'),
                 $type
             );
-        break;
+            break;
     }
 };
