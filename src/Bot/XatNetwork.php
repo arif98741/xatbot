@@ -481,7 +481,7 @@ class XatNetwork
         $bot = ActionAPI::getBot();
         if (!is_null($this->data->maxkick) && $this->data->maxkick > 0
             && !is_null($this->data->maxkickban) && $this->data->maxkickban > 0 && !$bot->users[$uid]->isMod()) {
-            if (!DataAPI::isSetVariable('kicks_' . $uid)) {
+            if (!DataAPI::issetVariable('kicks_' . $uid)) {
                 DataAPI::set('kicks_' . $uid, 1);
             } else {
                 DataAPI::set('kicks_' . $uid, DataAPI::get('kicks_' . $uid) + 1);

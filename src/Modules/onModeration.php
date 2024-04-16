@@ -23,7 +23,7 @@ $onModeration = function (int $who, string $message) {
 
     DataAPI::set('moderated_' . $who, false);
 
-    if (!DataAPI::isSetVariable('lastMessage')) {
+    if (!DataAPI::issetVariable('lastMessage')) {
         DataAPI::set('lastMessage', $who);
     } else {
         if (DataAPI::get('lastMessage') != $who) {
@@ -32,12 +32,12 @@ $onModeration = function (int $who, string $message) {
         }
     }
 
-    if (!DataAPI::isSetVariable('lastAutoMessage') && !is_null($bot->data->automessagetime)
+    if (!DataAPI::issetVariable('lastAutoMessage') && !is_null($bot->data->automessagetime)
         && $bot->data->automessagetime > 0 && !empty($bot->data->automessage)) {
         DataAPI::set('lastAutoMessage', time() + $bot->data->automessagetime * 60);
     }
 
-    if (DataAPI::isSetVariable('lastAutoMessage') && DataAPI::get('lastAutoMessage') < time()
+    if (DataAPI::issetVariable('lastAutoMessage') && DataAPI::get('lastAutoMessage') < time()
         && !empty($bot->data->automessage)) {
         $bot->network->sendMessage($bot->data->automessage);
         DataAPI::set('lastAutoMessage', time() + $bot->data->automessagetime * 60);
@@ -48,10 +48,10 @@ $onModeration = function (int $who, string $message) {
     // Check if user (moderator) sent a message in the last x minutes
     if (is_int($bot->data->kickafk_minutes) && $bot->data->kickafk_minutes >= 5) {
         foreach ($bot->users as $id => $user) {
-            if ($user->isMod() && DataAPI::isSetVariable('lastMessage_' . $id)) {
+            if ($user->isMod() && DataAPI::issetVariable('lastMessage_' . $id)) {
                 $time = DataAPI::get('lastMessage_' . $id);
                 if ($time + ($bot->data->kickafk_minutes * 60) < time()) {
-                    if (!DataAPI::isSetVariable('kickAFK_' . $id)) {
+                    if (!DataAPI::issetVariable('kickAFK_' . $id)) {
                         $bot->network->sendPrivateConversation(
                             $id,
                             'You need to answer this message or you will be kicked in the next 30 seconds. (bump)'
@@ -61,9 +61,9 @@ $onModeration = function (int $who, string $message) {
                 }
             }
 
-            if (DataAPI::isSetVariable('kickAFK_' . $id)) {
+            if (DataAPI::issetVariable('kickAFK_' . $id)) {
                 if (DataAPI::get('kickAFK_' . $id) < time()) {
-                    DataAPI::unSetVariable('kickAFK_' . $id);
+                    DataAPI::unsetVariable('kickAFK_' . $id);
                     $bot->network->kick(
                         $id,
                         'You did not send any message in the last ' . $bot->data->kickafk_minutes . ' minutes.'
@@ -76,7 +76,7 @@ $onModeration = function (int $who, string $message) {
     if ($bot->data->togglemoderation) {
         if ($bot->flagToRank($who) < $bot->stringToRank($bot->chatInfo['rank'])) {
             if (isset($bot->data->maxflood) && $bot->data->maxflood > 1) {
-                if (!DataAPI::isSetVariable('countMessage')) {
+                if (!DataAPI::issetVariable('countMessage')) {
                     DataAPI::set('countMessage', 1);
                 } else {
                     $value = DataAPI::get('countMessage');

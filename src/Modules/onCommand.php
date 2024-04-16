@@ -11,7 +11,7 @@ $onCommand = function (int $who, array $message, int $type) {
         return;
     }
 
-    if (DataAPI::isSetVariable('userCooldown_' . $who)) {
+    if (DataAPI::issetVariable('userCooldown_' . $who)) {
         $cooldown = DataAPI::get('userCooldown_' . $who);
         if ($cooldown['lastCommandSent'] + 10 > time()) {
             $cooldown['commandCount'] += 1;
@@ -44,7 +44,7 @@ $onCommand = function (int $who, array $message, int $type) {
             utf8_encode($message) . '"';
         $log->save();
 
-        if (DataAPI::isSetVariable('userEvent_' . $who)) {
+        if (DataAPI::issetVariable('userEvent_' . $who)) {
             $event = DataAPI::get('userEvent_' . $who);
             $event['amount_commands'] += 1;
             DataAPI::set('userEvent_' . $who, $event);

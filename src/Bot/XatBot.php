@@ -32,7 +32,11 @@ class XatBot
     public $packetsinqueue;
     public $refreshing;
 
-    public function __construct(Bot $data, $refreshing = false)
+    /**
+     * @param Bot $data
+     * @param bool $refreshing
+     */
+    public function __construct(Bot $data, bool $refreshing = false)
     {
         $this->data = $data;
         $this->started = time();

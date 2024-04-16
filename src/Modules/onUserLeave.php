@@ -13,7 +13,7 @@ $onUserLeave = function (int $who) {
 
     // Auto gamebot?
     if ($who == 804) {
-        if (DataAPI::isSetVariable('bot') && (DataAPI::get('bot') == true)) {
+        if (DataAPI::issetVariable('bot') && (DataAPI::get('bot') == true)) {
             $bot->network->sendMessage('!bot');
             usleep(500000);
             $bot->network->sendMessage('!start');
@@ -22,51 +22,51 @@ $onUserLeave = function (int $who) {
 
     unset($bot->users[$who]);
 
-    if (DataAPI::isSetVariable('away_' . $who)) {
-        DataAPI::unSetVariable('away_' . $who);
+    if (DataAPI::issetVariable('away_' . $who)) {
+        DataAPI::unsetVariable('away_' . $who);
     }
 
-    if (DataAPI::isSetVariable('joined_' . $who)) {
-        DataAPI::unSetVariable('joined_' . $who);
+    if (DataAPI::issetVariable('joined_' . $who)) {
+        DataAPI::unsetVariable('joined_' . $who);
     }
 
-    if (DataAPI::isSetVariable('spotify_' . $who)) {
-        DataAPI::unSetVariable('spotify_' . $who);
+    if (DataAPI::issetVariable('spotify_' . $who)) {
+        DataAPI::unsetVariable('spotify_' . $who);
     }
 
-    if (DataAPI::isSetVariable('steam_' . $who)) {
-        DataAPI::unSetVariable('steam_' . $who);
+    if (DataAPI::issetVariable('steam_' . $who)) {
+        DataAPI::unsetVariable('steam_' . $who);
     }
 
-    if (DataAPI::isSetVariable('boards_' . $who)) {
-        DataAPI::unSetVariable('boards_' . $who);
+    if (DataAPI::issetVariable('boards_' . $who)) {
+        DataAPI::unsetVariable('boards_' . $who);
     }
 
-    if (DataAPI::isSetVariable('botstat_' . $who)) {
-        DataAPI::unSetVariable('botstat_' . $who);
+    if (DataAPI::issetVariable('botstat_' . $who)) {
+        DataAPI::unsetVariable('botstat_' . $who);
     }
 
-    if (DataAPI::isSetVariable('kickAFK_' . $who)) {
-        DataAPI::unSetVariable('kickAFK_' . $who);
+    if (DataAPI::issetVariable('kickAFK_' . $who)) {
+        DataAPI::unsetVariable('kickAFK_' . $who);
     }
 
-    if (DataAPI::isSetVariable('lastMessage_' . $who)) {
-        DataAPI::unSetVariable('lastMessage_' . $who);
+    if (DataAPI::issetVariable('lastMessage_' . $who)) {
+        DataAPI::unsetVariable('lastMessage_' . $who);
     }
 
-    if (DataAPI::isSetVariable('isAutotemp_' . $who)) {
-        DataAPI::unSetVariable('isAutotemp_' . $who);
+    if (DataAPI::issetVariable('isAutotemp_' . $who)) {
+        DataAPI::unsetVariable('isAutotemp_' . $who);
     }
 
-    if (DataAPI::isSetVariable('hangman_' . $who)) {
-        DataAPI::unSetVariable('hangman_' . $who);
+    if (DataAPI::issetVariable('hangman_' . $who)) {
+        DataAPI::unsetVariable('hangman_' . $who);
     }
 
-    if (!DataAPI::isSetVariable('moderated_' . $who)) {
-        DataAPI::unSetVariable('moderated_' . $who);
+    if (!DataAPI::issetVariable('moderated_' . $who)) {
+        DataAPI::unsetVariable('moderated_' . $who);
     }
 
-    if (DataAPI::isSetVariable('userEvent_' . $who)) {
+    if (DataAPI::issetVariable('userEvent_' . $who)) {
         $event = DataAPI::get('userEvent_' . $who);
         $event['left_at'] = date('Y/m/d H:i:s', time());
 
@@ -75,7 +75,7 @@ $onUserLeave = function (int $who) {
             $UserEvents->$key = $value;
         }
         $UserEvents->save();
-        DataAPI::unSetVariable('userEvent_' . $who);
+        DataAPI::unsetVariable('userEvent_' . $who);
     }
 
     DataAPI::set('left_' . $who, time());

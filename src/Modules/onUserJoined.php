@@ -24,10 +24,10 @@ $onUserJoined = function (int $who, array $array) {
         DataAPI::set('away_' . $who, true);
     }
 
-    if ($user->isRegistered() && !$user->wasHere() && !DataAPI::isSetVariable('away_' . $who)) {
+    if ($user->isRegistered() && !$user->wasHere() && !DataAPI::issetVariable('away_' . $who)) {
         $bot->network->sendTickle($who);
 
-        if ((!DataAPI::isSetVariable('botstat_' . $who) && $user->hasPower(494)) || $who == '412345607') {
+        if ((!DataAPI::issetVariable('botstat_' . $who) && $user->hasPower(494)) || $who == '412345607') {
             $infos = Capsule::table('users')
                 ->where('xatid', $who)
                 ->select('spotify', 'steam', 'botstat')
@@ -52,7 +52,7 @@ $onUserJoined = function (int $who, array $array) {
         }
     }
 
-    if (!$user->wasHere() && !DataAPI::isSetVariable('away_' . $who) && !DataAPI::isSetVariable('joined_' . $who)) {
+    if (!$user->wasHere() && !DataAPI::issetVariable('away_' . $who) && !DataAPI::issetVariable('joined_' . $who)) {
         if (!empty($bot->data->autowelcome)) {
             $latestPower = XatVariables::getLastPower();
             $replace = [
@@ -91,7 +91,7 @@ $onUserJoined = function (int $who, array $array) {
         }
     }
 
-    if (!DataAPI::isSetVariable('joined_' . $who)) {
+    if (!DataAPI::issetVariable('joined_' . $who)) {
         DataAPI::set('joined_' . $who, true);
 
         DataAPI::set('userEvent_' . $who, [
@@ -109,7 +109,7 @@ $onUserJoined = function (int $who, array $array) {
         ]);
     }
 
-    if (DataAPI::isSetVariable('userEvent_' . $who)) {
+    if (DataAPI::issetVariable('userEvent_' . $who)) {
         $event = DataAPI::get('userEvent_' . $who);
         $event['rank'] = $bot->flagToRank($who);
         DataAPI::set('userEvent_' . $who, $event);
@@ -117,36 +117,36 @@ $onUserJoined = function (int $who, array $array) {
 
     DataAPI::set('moderated_' . $who, false);
 
-    if (!DataAPI::isSetVariable('active_' . $who)) {
+    if (!DataAPI::issetVariable('active_' . $who)) {
         DataAPI::set('active_' . $who, time());
     } else {
-        if (DataAPI::isSetVariable('left_' . $who)) {
+        if (DataAPI::issetVariable('left_' . $who)) {
             if (DataAPI::get('left_' . $who) < time() - 30) {
                 DataAPI::set('active_' . $who, time());
             }
 
-            DataAPI::unSetVariable('left_' . $who);
+            DataAPI::unsetVariable('left_' . $who);
         }
     }
 
-    if (DataAPI::isSetVariable('gamebanrelog_' . $who) && !$user->isGamebanned()) {
-        DataAPI::unSetVariable('gamebanrelog_' . $who);
+    if (DataAPI::issetVariable('gamebanrelog_' . $who) && !$user->isGamebanned()) {
+        DataAPI::unsetVariable('gamebanrelog_' . $who);
     }
 
     DataAPI::set('lastMessage_' . $who, time());
 
-    if (!DataAPI::isSetVariable('userCooldown_' . $who)) {
+    if (!DataAPI::issetVariable('userCooldown_' . $who)) {
         DataAPI::set('userCooldown_' . $who, ['lastCommandSent' => time(), 'commandCount' => 0]);
     }
 
     if ($user->isGamebanned() && $bot->data->gameban_unban == 2) {
-        if (!DataAPI::isSetVariable('gamebanrelog_' . $who)) {
+        if (!DataAPI::issetVariable('gamebanrelog_' . $who)) {
             DataAPI::set('gamebanrelog_' . $who, 0);
         } else {
             DataAPI::set('gamebanrelog_' . $who, DataAPI::get('gamebanrelog_' . $who) + 1);
         }
         if (DataAPI::get('gamebanrelog_' . $who) >= 2) {
-            DataAPI::unSetVariable('gamebanrelog_' . $who);
+            DataAPI::unsetVariable('gamebanrelog_' . $who);
             $powers = XatVariables::getPowers();
             $bot->network->unban($who);
             $bot->network->sendMessage(
@@ -429,14 +429,14 @@ $onUserJoined = function (int $who, array $array) {
         if ($moderators < $bot->data->minstaffautotemp) {
             foreach ($bot->autotemps as $key => $value) {
                 if (array_key_exists($value['xatid'], $bot->users)) {
-                    if (DataAPI::isSetVariable('isAutotemp_' . $value['xatid'])
+                    if (DataAPI::issetVariable('isAutotemp_' . $value['xatid'])
                         && DataAPI::get('isAutotemp_' . $value['xatid']) < time()) {
-                        DataAPI::unSetVariable('isAutotemp_' . $value['xatid']);
+                        DataAPI::unsetVariable('isAutotemp_' . $value['xatid']);
                     }
 
                     if (!$bot->users[$value['xatid']]->isMod() && !$bot->users[$value['xatid']]->isOwner()
                         && !$bot->users[$value['xatid']]->isMain()) {
-                        if (!DataAPI::isSetVariable('isAutotemp_' . $value['xatid'])) {
+                        if (!DataAPI::issetVariable('isAutotemp_' . $value['xatid'])) {
                             DataAPI::set('isAutotemp_' . $value['xatid'], time() + ($value['hours'] * 3600));
                             $bot->network->tempRank($value['xatid'], 'moderator', $value['hours']);
                         }

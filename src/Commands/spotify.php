@@ -11,7 +11,7 @@ $spotify = function (int $who, array $message, int $type) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
     }
 
-    if (!DataAPI::isSetVariable('spotify_' . $who)) {
+    if (!DataAPI::issetVariable('spotify_' . $who)) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('cmd.spotify.pleaserefresh'), $type);
     }
 

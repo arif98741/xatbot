@@ -278,13 +278,13 @@ class Server
 
                             if (sizeof($Ocean->users) > 0) {
                                 foreach ($Ocean->users as $xatid => $user) {
-                                    if (DataAPI::isSetVariable('botstat_' . $xatid)) {
+                                    if (DataAPI::issetVariable('botstat_' . $xatid)) {
                                         if (DataAPI::get('botstat_' . $xatid)['toggle'] == 'spotify') {
-                                            if (DataAPI::isSetVariable('spotify_' . $xatid)) {
+                                            if (DataAPI::issetVariable('spotify_' . $xatid)) {
                                                 $Ocean->spotify($xatid);
                                             }
                                         } elseif (DataAPI::get('botstat_' . $xatid)['toggle'] == 'steam') {
-                                            if (DataAPI::isSetVariable('steam_' . $xatid)) {
+                                            if (DataAPI::issetVariable('steam_' . $xatid)) {
                                                 $Ocean->steam($xatid);
                                             }
                                         }

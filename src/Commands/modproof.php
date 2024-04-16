@@ -10,7 +10,7 @@ $modproof = function (int $who, array $message, int $type) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
     }
 
-    if (!DataAPI::isSetVariable('modproof')) {
+    if (!DataAPI::issetVariable('modproof')) {
         return $bot->network->sendMessageAutoDetection($who, 'I have nothing to show!', $type, true);
     }
 

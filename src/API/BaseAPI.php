@@ -7,7 +7,6 @@ use Exception;
 abstract class BaseAPI
 {
     private static bool $init = false;
-
     private static int $botID = 0;
     private static int $bot = 0;
     private static $moduleName = null;
@@ -50,7 +49,7 @@ abstract class BaseAPI
     final public static function getBot()
     {
         if (!self::$init) {
-            throw new Exception('API not initalized.');
+            throw new \RuntimeException('API not initialized.');
         }
 
         return self::$bot;

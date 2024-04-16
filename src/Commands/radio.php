@@ -10,7 +10,7 @@ $radio = function (int $who, array $message, int $type) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
     }
 
-    if (DataAPI::isSetVariable('radio')) {
+    if (DataAPI::issetVariable('radio')) {
         $infos = DataAPI::get('radio');
         if ($infos['lastCheck'] > time()) {
             return $bot->network->sendMessageAutoDetection(

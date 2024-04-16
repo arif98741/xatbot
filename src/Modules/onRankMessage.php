@@ -70,7 +70,7 @@ $onRankMessage = function (array $array) {
                 // <m  t="/u" u="412345607" d="586552"  />
                 $log->message = '[Rank] ' . $user1 . ' unbanned ' . $user2 . '!';
 
-                if (DataAPI::isSetVariable('userEvent_' . $array['u'])) {
+                if (DataAPI::issetVariable('userEvent_' . $array['u'])) {
                     $event = DataAPI::get('userEvent_' . $array['u']);
                     $event['amount_bans'] += 1;
                     DataAPI::set('userEvent_' . $array['u'], $event);
@@ -82,7 +82,7 @@ $onRankMessage = function (array $array) {
                 $log->message = '[Rank] ' . $user1 . ' banned ' . $user2 . ' for ' .
                     round(substr($array['t'], 2) / 3600, 2) . ' hours reason: "' . (!empty($array['p']) ?? '') . '"';
 
-                if (DataAPI::isSetVariable('userEvent_' . $array['u'])) {
+                if (DataAPI::issetVariable('userEvent_' . $array['u'])) {
                     $event = DataAPI::get('userEvent_' . $array['u']);
                     $event['amount_bans'] += 1;
                     DataAPI::set('userEvent_' . $array['u'], $event);
@@ -124,7 +124,7 @@ $onRankMessage = function (array $array) {
                         break;
                 }
 
-                if (DataAPI::isSetVariable('userEvent_' . $array['u'])) {
+                if (DataAPI::issetVariable('userEvent_' . $array['u'])) {
                     $event = DataAPI::get('userEvent_' . $array['u']);
                     $event['amount_ranks'] += 1;
                     DataAPI::set('userEvent_' . $array['u'], $event);
@@ -135,14 +135,14 @@ $onRankMessage = function (array $array) {
                 // <m  p="test" t="/k" u="412345607" d="586552"  />
                 $log->message = '[Rank] ' . $user1 . ' kicked ' . $user2 . ' reason: "' . $array['p'] . '"';
                 if ($array['u'] != XatVariables::getXatid()) {
-                    if (!DataAPI::isSetVariable('kicks_' . $array['d'])) {
+                    if (!DataAPI::issetVariable('kicks_' . $array['d'])) {
                         DataAPI::set('kicks_' . $array['d'], 1);
                     } else {
                         DataAPI::set('kicks_' . $array['d'], DataAPI::get('kicks_' . $array['d']) + 1);
                     }
                 }
 
-                if (DataAPI::isSetVariable('userEvent_' . $array['u'])) {
+                if (DataAPI::issetVariable('userEvent_' . $array['u'])) {
                     $event = DataAPI::get('userEvent_' . $array['u']);
                     $event['amount_kicks'] += 1;
                     DataAPI::set('userEvent_' . $array['u'], $event);

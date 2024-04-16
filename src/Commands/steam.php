@@ -11,7 +11,7 @@ $steam = function (int $who, array $message, int $type) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('not.enough.rank'), $type);
     }
 
-    if (!DataAPI::isSetVariable('steam_' . $who)) {
+    if (!DataAPI::issetVariable('steam_' . $who)) {
         return $bot->network->sendMessageAutoDetection($who, $bot->botlang('cmd.steam.pleaserefresh'), $type);
     }
 

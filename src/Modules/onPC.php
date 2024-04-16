@@ -37,15 +37,15 @@ $onPC = function (int $who, string $message) {
         }
     }
 
-    if (DataAPI::isSetVariable('kickAFK_' . $who)) {
-        DataAPI::unSetVariable('kickAFK_' . $who);
+    if (DataAPI::issetVariable('kickAFK_' . $who)) {
+        DataAPI::unsetVariable('kickAFK_' . $who);
         $bot->network->sendPrivateConversation($who, 'Ok (crs).');
     }
 
-    if ($bot->data->automember == 'math' && DataAPI::isSetVariable('automember_' . $who)) {
+    if ($bot->data->automember == 'math' && DataAPI::issetVariable('automember_' . $who)) {
         if (DataAPI::get('automember_' . $who) == $message[0]) {
             $bot->network->sendPrivateConversation($who, 'You are now a member');
-            DataAPI::unSetVariable('automember_' . $who);
+            DataAPI::unsetVariable('automember_' . $who);
             $bot->network->changeRank($who, 'member');
         } else {
             $bot->network->sendPrivateConversation($who, 'Wrong answer!');

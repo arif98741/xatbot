@@ -13,7 +13,7 @@ $leastactive = function (int $who, array $message, int $type) {
     $least = ['user' => null, 'time' => 0];
 
     foreach ($bot->users as $user) {
-        if (!is_object($user) || !DataAPI::isSetVariable('active_' . $user->getID())) {
+        if (!is_object($user) || !DataAPI::issetVariable('active_' . $user->getID())) {
             continue;
         }
 

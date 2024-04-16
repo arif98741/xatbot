@@ -16,6 +16,9 @@ class DataAPI extends BaseAPI
     //::////////////////////////////////////////////////////////////////////////
 
     /**
+     * @param $name
+     * @param $value
+     * @return void
      * @throws \Exception
      */
     public static function set($name, $value)
@@ -23,23 +26,32 @@ class DataAPI extends BaseAPI
         self::$data[self::getBotID()][$name] = $value;
     }
 
-    public static function get($name)
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function get(string $name)
     {
         return self::$data[self::getBotID()][$name];
     }
 
     /**
+     * @param string $name
+     * @return bool
      * @throws \Exception
      */
-    public static function isSetVariable($name)
+    public static function issetVariable(string $name)
     {
         return (isset(self::$data[self::getBotID()][$name]));
     }
 
     /**
+     * @param string $name
+     * @return void
      * @throws \Exception
      */
-    public static function unSetVariable($name)
+    public static function unsetVariable(string $name)
     {
         unset(self::$data[self::getBotID()][$name]);
     }

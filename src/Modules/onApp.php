@@ -12,13 +12,13 @@ $onApp = function (int $who, string $app, array $array) {
         case '20010':
             if (isset($array['d']) && $who != $bot->network->logininfo['i']) {
                 if (!isset($array['t']) || empty($array['t'])) {
-                    if (DataAPI::isSetVariable('boards_' . $who)) {
-                        DataAPI::unSetVariable('boards_' . $who);
+                    if (DataAPI::issetVariable('boards_' . $who)) {
+                        DataAPI::unsetVariable('boards_' . $who);
                     }
                     return;
                 }
-                if ((DataAPI::isSetVariable('boards_' . $who) && (strlen($array['t']) == 0 ||
-                            strlen($array['t'] == 1))) || !DataAPI::isSetVariable('boards_' . $who)) {
+                if ((DataAPI::issetVariable('boards_' . $who) && (strlen($array['t']) == 0 ||
+                            strlen($array['t'] == 1))) || !DataAPI::issetVariable('boards_' . $who)) {
                     DataAPI::set('boards_' . $who, new XatConnect4());
                 }
                 $last = substr($array['t'], -1);
@@ -27,16 +27,16 @@ $onApp = function (int $who, string $app, array $array) {
                 }
                 $move = DataAPI::get('boards_' . $who)->set(ord($last) - 65);
                 if ($move == 1000) {
-                    DataAPI::unSetVariable('boards_' . $who);
+                    DataAPI::unsetVariable('boards_' . $who);
                     return $bot->network->sendPrivateConversation($who, 'You have won.');
                 } elseif ($move == 50) {
-                    DataAPI::unSetVariable('boards_' . $who);
+                    DataAPI::unsetVariable('boards_' . $who);
                     return $bot->network->sendPrivateConversation($who, 'You caused the game to become a draw.');
                 } elseif ($move[0] == 51) {
-                    DataAPI::unSetVariable('boards_' . $who);
+                    DataAPI::unsetVariable('boards_' . $who);
                     $bot->network->sendPrivateConversation($who, 'I caused the game to become a draw.');
                 } elseif ($move == -1000 || $move[0] == -1000) {
-                    DataAPI::unSetVariable('boards_' . $who);
+                    DataAPI::unsetVariable('boards_' . $who);
                     $bot->network->sendPrivateConversation($who, 'You have lost.');
                 } elseif ($move == 666) {
                     $bot->network->sendPrivateConversation($who, 'Tsk tsk tsk... No cheating.');
@@ -47,7 +47,7 @@ $onApp = function (int $who, string $app, array $array) {
                         't' => substr($array['t'], 0, -1)
                     ]);
                 } elseif (strlen($array['t']) >= 42) {
-                    DataAPI::unSetVariable('boards_' . $who);
+                    DataAPI::unsetVariable('boards_' . $who);
                     return $bot->network->sendPrivateConversation(
                         $who,
                         'The game has ended in a draw because the board is full.'
@@ -100,20 +100,20 @@ $onApp = function (int $who, string $app, array $array) {
                                 'i' => 30008,
                                 'u' => XatVariables::getXatid(),
                                 'd' => $who,
-                                't' => 'T,' . (DataAPI::isSetVariable('sent_trade_' . $who) ?
+                                't' => 'T,' . (DataAPI::issetVariable('sent_trade_' . $who) ?
                                         DataAPI::get('sent_trade_' . $who) : '0;0;') . ',' .
-                                    (DataAPI::isSetVariable('received_trade_' . $who) ?
+                                    (DataAPI::issetVariable('received_trade_' . $who) ?
                                         DataAPI::get('received_trade_' . $who) : '0;0;') . ',' .
                                     XatVariables::getPassword()
                             ];
                             $bot->network->write('x', $buildPacket);
 
-                            if (DataAPI::isSetVariable('sent_trade_' . $who)) {
-                                DataAPI::unSetVariable('sent_trade_' . $who);
+                            if (DataAPI::issetVariable('sent_trade_' . $who)) {
+                                DataAPI::unsetVariable('sent_trade_' . $who);
                             }
 
-                            if (DataAPI::isSetVariable('received_trade_' . $who)) {
-                                DataAPI::unSetVariable('received_trade_' . $who);
+                            if (DataAPI::issetVariable('received_trade_' . $who)) {
+                                DataAPI::unsetVariable('received_trade_' . $who);
                             }
                         }
                         break;
@@ -123,7 +123,7 @@ $onApp = function (int $who, string $app, array $array) {
             break;
 
         case '60002':
-            if (!DataAPI::isSetVariable('hangman_' . $who)) {
+            if (!DataAPI::issetVariable('hangman_' . $who)) {
                 return;
             }
 

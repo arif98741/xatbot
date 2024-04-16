@@ -137,5 +137,5 @@ $onFriendList = function (array $array) {
         DataAPI::get('online_command')['type']
     );
 
-    DataAPI::unSetVariable('online_command');
+    DataAPI::unsetVariable('online_command');
 };
