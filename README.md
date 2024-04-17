@@ -2,7 +2,7 @@
 
 ## What do i need to run it?
 
-- PHP7.1
+- PHP8.1
 - A xat account to use it as bot
 
 ## How does it work?
@@ -17,7 +17,7 @@ Once everything is cloned, you can launch bots servers with: php start.php
 
 Docker:
 
-- docker run -it --rm -v $(pwd):/op php:7.1-alpine sh
+- docker run -it --rm -v $(pwd):/op php:8.1-alpine sh
 - cd op
 - docker-php-ext-install sockets
 - php start.php
